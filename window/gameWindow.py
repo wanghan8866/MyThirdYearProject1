@@ -6,7 +6,7 @@ from utility.nameSplitor import splitByUpper
 class GameWindow(ctk.CTkToplevel):
     layouts = [(0, 0), (0, 1), (1, 0), (1, 1)]
 
-    def __init__(self, master, games: list, agents: list, *args, **kwargs):
+    def __init__(self, master, games: list, agents: list, pattern=None, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.title("Game")
         # self.geometry("400x400")
@@ -23,7 +23,7 @@ class GameWindow(ctk.CTkToplevel):
 
             name = ctk.CTkLabel(frame, text=splitByUpper(agent))
             name.pack()
-            game = GameCanvas(frame, game_name=games[0], agent_name=agent, background="black")
+            game = GameCanvas(frame, game_name=games[0], agent_name=agent, background="black", pattern=pattern)
             if agent == "human":
                 self.human_agents.append(game)
             game.pack(padx=5, pady=5, fill="both", expand=True)

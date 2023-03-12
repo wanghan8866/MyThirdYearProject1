@@ -13,37 +13,39 @@ from meta.appMeta import AppMeta
 print()
 dones = False
 MOVE_INCREMENT = 20
-MOVES_PER_SECOND = 15
+MOVES_PER_SECOND = 10
 GAME_SPEED = 1000 // MOVES_PER_SECOND
 
 
 class GameCanvas(ctk.CTkCanvas):
     layouts = [[(0, 0)], [(0, 0), (1, 0)], [(0, 0), (1, 0), (0.5, 1)], [(0, 0), (1, 0), (0, 1), (1, 1)]]
 
-    def __init__(self, container, game_name: str, agent_name: str, *args, **kwargs):
+    def __init__(self, container, game_name: str, agent_name: str, pattern=None, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
         # if len(game_names) != len(agent_names):
         #     raise ValueError("length of games not matching!")
         # self.N = len(game_names)
         # self.configure(width=1000, height=1000, background="yellow")
         # self.envs: List[Env] = [EnvCreator.createEnv(game) for game in game_names]
-        self.env: Env = EnvCreator.createEnv(game_name)
+        self.env: Env = EnvCreator.createEnv(game_name, agent_name=agent_name, pattern=pattern)
 
         # obs_list = [env.reset() for env in self.envs]
         self.obs = self.env.reset()
+        array = self.env.render(mode="rgb_array")
         self.flip = False
         self.game_name = game_name
         self.agent_name = agent_name
+
         if game_name == "FlappyBird":
             self.flip = True
-            self.obs = np.transpose(self.obs, axes=(1, 0, 2))
-        print(self.obs.shape)
+            array = np.transpose(array, axes=(1, 0, 2))
+        print(array.shape)
         print(self.env.action_space)
-        if len(self.obs.shape) > 2:
-            self.configure(height=self.obs.shape[0], width=self.obs.shape[1])
+        if len(array.shape) > 2:
+            self.configure(height=array.shape[0], width=array.shape[1])
         self.container = container
         # self.models = [AgentCreator.createAgent(agent_name) for agent_name in agent_names]
-        self.agent = AgentCreator.createAgent(agent_name, game_name)
+        self.agent = AgentCreator.createAgent(agent_name, game_name, self.env)
         # self.container.img=None
         # self.dones = np.zeros(shape=(self.N,))
         self.images = [None]
@@ -64,7 +66,7 @@ class GameCanvas(ctk.CTkCanvas):
         self.obs, rewards, done, info = self.env.step(action)
         self.current_action = None
         self.total_reward += rewards
-        array = self.env.render(mode="rgb_array")
+        array = self.agent.render()
         if self.flip:
             array = np.transpose(array, axes=(1, 0, 2))
         self.images[0] = ImageTk.PhotoImage(image=Image.fromarray(array))

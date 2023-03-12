@@ -6,10 +6,11 @@ from widget.selectSection import SelectSection
 from meta.appMeta import AppMeta
 from window.gameWindow import GameWindow
 
+
 class SinglePlayerFrame(ctk.CTkFrame):
 
     def on_click(self, *args):
-        GameWindow(self,self.section.getSelected(), self.section1.getSelected())
+        GameWindow(self, self.section.getSelected(), self.section1.getSelected())
 
     def __init__(self, master: any, *args, **kwargs):
         super().__init__(master, *args, **kwargs)

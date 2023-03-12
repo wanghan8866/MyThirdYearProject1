@@ -3,16 +3,16 @@ from typing import List, Dict, Set, Tuple
 
 class AppMeta:
     APP_TITLE = "My Third Year Project"
-    SIZE = "750x450"
+    SIZE = "750x600"
     GAMES: Dict[str, List[str]] = {
         "Breakout": [
             "randomAgent",
             "randomAgent",
-            "breakoutA2C",
-            "breakoutA2C",
+            "DuelingDDQN",
+            "DuelingDDQN",
             "human"
         ],
-        "BattleZone": [
+        "Qbert": [
             "randomAgent",
             "randomAgent",
             "randomAgent",
@@ -27,12 +27,16 @@ class AppMeta:
             "randomAgent",
             "human"
         ],
-        "Skiing": [
+        "Snake-gen": [
             "randomAgent",
-            "human"
+            "A* agent",
+            "genetic Agent",
+            "human",
+            "DeepQLearningSnakeAgent"
+
         ],
         "FlappyBird": [
-            "randomAgent",
+            "DuelingDDQN",
             "randomAgent",
             "human"
         ],
@@ -63,9 +67,12 @@ class AppMeta:
             "RIGHT": 2,
             "LEFT": 3
         },
-        "Skiing": {
-            "RIGHT": 1,
-            "LEFT": 2
+        "Snake-gen": {
+
+            "UP": 2,
+            "RIGHT": 3,
+            "LEFT": 4,
+            "DOWN": 5,
         },
         "FlappyBird": {
             "FIRE": 1,
