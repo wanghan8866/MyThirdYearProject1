@@ -4,7 +4,7 @@ from utility.imageLoader import ImageLoader
 import customtkinter as ctk
 from frame.homeFrame import HomeFrame
 from frame.settingFrame import SettingFrame
-from frame.multiFrame import TrainingFrame
+from frame.trainFrame import TrainingFrame
 from frame.singleFrame import SinglePlayerFrame
 from frame.testingFrame import TestingFrame
 

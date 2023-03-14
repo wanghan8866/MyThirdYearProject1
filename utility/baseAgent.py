@@ -148,7 +148,7 @@ class HumanSnakeAgent(BaseAgent):
     def predict(self, state, action_space, action):
         # print("predicted action", self.agent.possible_directions[self.agent.action_space.sample()] )
         # path = Mixed(self.agent, self.agent.apple_location).run_mixed()
-        print("human", action)
+        # print("human", action)
         if action == 2:
             self.old_action = "u"
             # return "u"

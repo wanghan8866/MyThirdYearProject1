@@ -6,7 +6,7 @@ from ctypes import windll
 
 
 class SelectSection(ctk.CTkFrame):
-    def __init__(self, parent, name, mode, content, linker=None, **kwargs):
+    def __init__(self, parent, name, mode, content, linker=None, callback=None, **kwargs):
         ctk.CTkFrame.__init__(self, parent, **kwargs)
         self.mode = mode
         self.canvas = ctk.CTkCanvas(self, borderwidth=0,
@@ -27,13 +27,14 @@ class SelectSection(ctk.CTkFrame):
         self.frame.bind("<Configure>", self.onFrameConfigure)
         self.content = content
         self.linker = linker
+        self.callback=callback
 
         self.populate()
 
     def populate(self):
         '''Put in some fake data'''
         for row, name in enumerate(self.content):
-            ImageNode(self.frame, name, mode=self.mode, linker=self.linker).grid(row=0, column=row, padx=5, pady=0)
+            ImageNode(self.frame, name, mode=self.mode, linker=self.linker, callback=self.callback).grid(row=0, column=row, padx=5, pady=0)
             t = "this is the second column for row %s" % row
             # ImageNode(self.frame).grid(row=1, column=row)
 

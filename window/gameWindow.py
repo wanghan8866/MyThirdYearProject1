@@ -32,8 +32,8 @@ class GameWindow(ctk.CTkToplevel):
         # self.grid_propagate(False)
         # self.pack_propagate(False)
         self.events_binding()
-        print(games)
-        print(agents)
+        # print(games)
+        # print(agents)
 
     def onKey(self, e):
         for agent in self.human_agents:

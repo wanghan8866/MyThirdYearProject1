@@ -103,30 +103,6 @@ class MainWindow(QtWidgets.QMainWindow):
         if show:
             self.show()
 
-    def init_window(self):
-        self.centralWidget = QtWidgets.QWidget(self)
-        self.setCentralWidget(self.centralWidget)
-        self.setWindowTitle('Snake AI')
-        self.setGeometry(self.top, self.left, self.width, self.height)
-
-        # Create the Neural Network window
-        self.nn_viz_window = NeuralNetworkViz(self.centralWidget, self.snake)
-        self.nn_viz_window.setGeometry(
-            QtCore.QRect(0, 0, 600, self._snake_widget_height + self.border[1] + self.border[3] + 200))
-        self.nn_viz_window.setObjectName('nn_viz_window')
-
-        # Create SnakeWidget window
-        self.snake_widget_window = SnakeWidget(self.centralWidget, self.board_size, self.snake)
-        self.snake_widget_window.setGeometry(
-            QtCore.QRect(600 + self.border[0], self.border[1], self.snake_widget_width, self.snake_widget_height))
-        self.snake_widget_window.setObjectName('snake_widget_window')
-
-        # Genetic Algorithm Stats window
-        self.ga_window = GeneticAlgoWidget(self.centralWidget, self.settings)
-        self.ga_window.setGeometry(QtCore.QRect(600, self.border[1] + self.border[3] + self.snake_widget_height,
-                                                self._snake_widget_width + self.border[0] + self.border[2] + 100,
-                                                200 - 10))
-        self.ga_window.setObjectName('ga_window')
 
     def update(self) -> None:
         # self.snake_widget_window.update()

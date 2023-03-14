@@ -8,7 +8,7 @@ from utility.nameSplitor import splitByUpper
 
 
 class ImageNode(ctk.CTkFrame):
-    def __init__(self, container: ctk.CTkFrame, name: str, mode="m", linker=None, *arg, **kwargs):
+    def __init__(self, container: ctk.CTkFrame, name: str, mode="m", linker=None, callback=None, *arg, **kwargs):
         super().__init__(container, *arg, **kwargs)
 
         self.mode = mode
@@ -19,17 +19,19 @@ class ImageNode(ctk.CTkFrame):
         label.pack(pady=10)
         label = ctk.CTkLabel(self, text=splitByUpper(name))
         label.pack()
+        self.callback=callback
 
         self.configure(width=100, height=100, border_width=2, border_color="gray")
         self.pack_propagate(False)
         self.events_binding()
+
 
     # def onEnter(self, *args):
     #     self.configure(border_color="red")
     # def onLeave(self, *args):
     #     self.configure(border_color="black")
 
-    def onClick(self, *args):
+    def onClick(self,*args):
         if self.selected:
             self.configure(border_color="gray")
             self.selected = False
@@ -48,6 +50,8 @@ class ImageNode(ctk.CTkFrame):
             self.linker.content = AppMeta.GAMES.get(self.name, [])
             self.linker.clearAll()
             self.linker.populate()
+        if self.callback is not None:
+            self.callback()
 
 
     def events_binding(self):

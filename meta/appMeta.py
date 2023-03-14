@@ -3,7 +3,7 @@ from typing import List, Dict, Set, Tuple
 
 class AppMeta:
     APP_TITLE = "My Third Year Project"
-    SIZE = "750x600"
+    SIZE = "800x600"
     GAMES: Dict[str, List[str]] = {
         "Breakout": [
             "randomAgent",
