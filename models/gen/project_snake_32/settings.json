@@ -1,0 +1,13 @@
+{
+    "apple_and_self_vision": "binary",
+    "board_size": "(10, 10)",
+    "hidden_layer_activation": "relu",
+    "hidden_network_architecture": "[32, 32]",
+    "mutation_rate": "0.05",
+    "mutation_rate_type": "static",
+    "num_offspring": "1000",
+    "num_parents": "500",
+    "output_layer_activation": "sigmoid",
+    "selection_type": "plus",
+    "vision_type": "8"
+}

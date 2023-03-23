@@ -481,7 +481,7 @@ class Snake(Individual, Env):
         self.update(action)
         self.move()
         info = {}
-
+        self.reward = len(self.snake_array)
         return self.vision_as_array, self.reward, not self.is_alive, info
 
     def reset(self):
@@ -619,6 +619,7 @@ def save_snake(population_folder: str, individual_name: str, snake: Snake, setti
     # @NOTE: No need to save chromosome since that is saved as .npy
     # @NOTE: No need to save board_size or hidden_layer_architecture
     #        since these are taken from settings
+
     constructor = {}
     constructor['start_pos'] = snake.start_pos.to_dict()
     constructor['apple_seed'] = snake.apple_seed
@@ -675,16 +676,32 @@ def load_snake(population_folder: str, individual_name: str,
     snake_constructor_file = os.path.join(population_folder, individual_name, 'constructor_params.json')
     with open(snake_constructor_file, 'r', encoding='utf-8') as fp:
         constructor_params = json.load(fp)
+    if isinstance(settings['board_size'],str):
 
-    snake = Snake(settings['board_size'], chromosome=params,
-                  start_pos=Point.from_dict(constructor_params['start_pos']),
-                  apple_seed=constructor_params['apple_seed'],
-                  initial_velocity=constructor_params['initial_velocity'],
-                  starting_direction=constructor_params['starting_direction'],
-                  hidden_layer_architecture=settings['hidden_network_architecture'],
-                  hidden_activation=settings['hidden_layer_activation'],
-                  output_activation=settings['output_layer_activation'],
-                  lifespan=settings['lifespan'],
-                  apple_and_self_vision=settings['apple_and_self_vision']
-                  )
+        snake = Snake(
+                    eval(settings['board_size']), chromosome=params,
+                      start_pos=Point.from_dict(constructor_params['start_pos']),
+                      apple_seed=constructor_params['apple_seed'],
+                      # initial_velocity=constructor_params['initial_velocity'],
+                      starting_direction=constructor_params['starting_direction'],
+                      hidden_layer_architecture=eval(settings['hidden_network_architecture']),
+                      hidden_activation=settings['hidden_layer_activation'],
+                      output_activation=settings['output_layer_activation'],
+                      # lifespan=settings['lifespan'],
+                      apple_and_self_vision=settings['apple_and_self_vision']
+                      )
+    else:
+
+        snake = Snake(
+                      settings['board_size'], chromosome=params,
+                      start_pos=Point.from_dict(constructor_params['start_pos']),
+                      apple_seed=constructor_params['apple_seed'],
+                      # initial_velocity=constructor_params['initial_velocity'],
+                      starting_direction=constructor_params['starting_direction'],
+                      hidden_layer_architecture=settings['hidden_network_architecture'],
+                      hidden_activation=settings['hidden_layer_activation'],
+                      output_activation=settings['output_layer_activation'],
+                      # lifespan=settings['lifespan'],
+                      apple_and_self_vision=settings['apple_and_self_vision']
+                      )
     return snake

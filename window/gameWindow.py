@@ -6,12 +6,12 @@ from utility.nameSplitor import splitByUpper
 class GameWindow(ctk.CTkToplevel):
     layouts = [(0, 0), (0, 1), (1, 0), (1, 1)]
 
-    def __init__(self, master, games: list, agents: list, pattern=None, *args, **kwargs):
+    def __init__(self, master, games: list, agents: list, pattern=None, create_snake=None, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
-        self.title("Game")
+        self.title(games[0])
         # self.geometry("400x400")
         # self.resizable(False, False)
-        label = ctk.CTkLabel(self, text="window")
+        label = ctk.CTkLabel(self, text=games[0])
         label.pack()
         self.game_frame = ctk.CTkFrame(self)
         self.game_frame.pack()
@@ -23,7 +23,12 @@ class GameWindow(ctk.CTkToplevel):
 
             name = ctk.CTkLabel(frame, text=splitByUpper(agent))
             name.pack()
-            game = GameCanvas(frame, game_name=games[0], agent_name=agent, background="black", pattern=pattern)
+            if agent=="genetic Agent":
+                print("creating existing snake")
+                game = GameCanvas(frame, game_name=games[0], agent_name=agent, background="black", pattern=pattern,
+                                  create_env=create_snake)
+            else:
+                game = GameCanvas(frame, game_name=games[0], agent_name=agent, background="black", pattern=pattern)
             if agent == "human":
                 self.human_agents.append(game)
             game.pack(padx=5, pady=5, fill="both", expand=True)

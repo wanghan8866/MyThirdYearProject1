@@ -49,7 +49,7 @@ class BreakoutDDQN(BaseAgent):
                                       env_name="BreakoutNoFrameskip-v4"
                                       )
         self.agent.load_models()
-        self.myCanvas = NN_canvas(None, network=self.agent.q_eval, bg="white", height=1000, width=1000)
+        # self.myCanvas = NN_canvas(None, network=self.agent.q_eval, bg="white", height=1000, width=1000)
 
     def predict(self, state, action_space, action):
         return self.agent.choose_action(state)

@@ -21,7 +21,7 @@ class SelectSection(ctk.CTkFrame):
         self.label.pack(side="top")
         self.vsb.pack(side="bottom", fill="x")
         self.canvas.pack(side="left", fill="x", expand=True)
-        self.canvas.create_window((4, 4), window=self.frame, anchor="nw",
+        self.canvas.create_window((0, 0), window=self.frame, anchor="nw",
                                   tags="self.frame")
 
         self.frame.bind("<Configure>", self.onFrameConfigure)

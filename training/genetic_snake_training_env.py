@@ -126,7 +126,7 @@ def load_stats(path_to_stats: str, normalize: Optional[bool] = True):
 
 
 class GeneticSnakeTrainingEnv(BaseTrainingEnv):
-    def __init__(self, setting: dict, path: str, times: int, *args, **kwargs):
+    def __init__(self, setting: dict, path: str, times: int, current_gen:int=0, create_snake=None, *args, **kwargs):
         super(GeneticSnakeTrainingEnv, self).__init__(setting, *args, **kwargs)
         self._SBX_eta = GLOBAL_SETTINGS['SBX_eta']
         self._mutation_bins = np.cumsum([GLOBAL_SETTINGS['probability_gaussian'],
@@ -151,12 +151,16 @@ class GeneticSnakeTrainingEnv(BaseTrainingEnv):
         self.board_size = eval(self.settings["board_size"])
 
         for _ in range(eval(self.settings['num_parents'])):
-            individual = Snake(self.board_size,
-                               hidden_layer_architecture=eval(self.settings['hidden_network_architecture']),
-                               hidden_activation=self.settings['hidden_layer_activation'],
-                               output_activation=self.settings['output_layer_activation'],
-                               lifespan=GLOBAL_SETTINGS['lifespan'],
-                               apple_and_self_vision=self.settings['apple_and_self_vision'])
+            if create_snake:
+                individual=create_snake()
+            else:
+                individual = Snake(self.board_size,
+                                   hidden_layer_architecture=eval(self.settings['hidden_network_architecture']),
+                                   hidden_activation=self.settings['hidden_layer_activation'],
+                                   output_activation=self.settings['output_layer_activation'],
+                                   lifespan=GLOBAL_SETTINGS['lifespan'],
+                                   apple_and_self_vision=self.settings['apple_and_self_vision'])
+
             # individual = load_snake("models/test_64", f"snake_1400", settings)
             # individual = Snakes(self.board_size, hidden_layer_architecture=self.settings['hidden_network_architecture'],
             #                   hidden_activation=self.settings['hidden_layer_activation'],
@@ -174,7 +178,7 @@ class GeneticSnakeTrainingEnv(BaseTrainingEnv):
 
         self.snake = self.population.individuals[self._current_individual]
         self.myCanvas = NN_canvas(None, snake=self.snake, bg="white", height=1000, width=1000)
-        self.current_generation = 0
+        self.current_generation = current_gen
         # self.current_generation = 1699
         self.init_gen = self.current_generation
         self.times_to_save = times

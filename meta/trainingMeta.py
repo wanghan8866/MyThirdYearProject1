@@ -73,10 +73,10 @@ class TrainingMeta:
 
             # Number of parents that will be used for reproducing
             # 'num_parents':                 500,
-            'num_parents': NumberType(1, 1000, 500 ),
+            'num_parents': NumberType(1, 1000, 500),
             # Number of offspring that will be created. Keep num_offspring >= num_parents
             # 'num_offspring':               1000,
-            'num_offspring': NumberType(1, 2000, 1000 ),
+            'num_offspring': NumberType(1, 2000, 1000),
             # The selection type to use for the next generation.
             # If selection_type == 'plus':
             #     Then the top num_parents will be chosen from (num_offspring + num_parents)
@@ -86,7 +86,7 @@ class TrainingMeta:
             # If enough indivduals are unable to be selected for the next generation, new random ones will take their place.
             # @NOTE: If selection_type == 'comma' then lifespan is ignored.
             #   This is equivalent to lifespan = 1 in this case since the parents never make it to the new generation.
-            'selection_type': SelectionType(["plus","comma"],default="plus"),  # Options are ['plus', 'comma']
+            'selection_type': SelectionType(["plus", "comma"], default="plus"),  # Options are ['plus', 'comma']
 
             ## Individual ##
 
@@ -101,7 +101,10 @@ class TrainingMeta:
             # If the vision is binary, then the input into the Neural Network is 1 (can see) or 0 (cannot see).
             # If the vision is distance, then the input into the Neural Network is 1.0/distance.
             # 1.0/distance is used to keep values capped at 1.0 as a max.
-            'apple_and_self_vision':SelectionType(["binary","distance"],default="binary")  # Options are ['binary', 'distance']
+            'apple_and_self_vision': SelectionType(["binary", "distance"], default="binary"),
+            # Options are ['binary', 'distance']
+            'generation': SelectionType(["0"], default="0"),  # Options are ['binary', 'distance'],
+            "working_directory":   ListType(""),
         }
 
     }

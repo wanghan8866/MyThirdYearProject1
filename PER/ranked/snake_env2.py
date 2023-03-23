@@ -71,6 +71,8 @@ class SnakeEnv2(gym.Env):
         self.action_space = spaces.Discrete(4)
         self.direction = 3
         self.size = size
+        self._frames = 0
+        self.fitness = 0
         self.frames_from_last_apple = 0
         self.max_snake_length = int(pow(self.size, 2))
         # Example for using image as input (channel-first; channel-last also works):
@@ -86,6 +88,7 @@ class SnakeEnv2(gym.Env):
         self.apple_num = 0
 
     def step(self, action):
+        self._frames += 1
         # self.prev_actions.append(action)
         # cv2.imshow('a', self.img)
         # cv2.waitKey(1)
@@ -254,7 +257,7 @@ class SnakeEnv2(gym.Env):
         self.use_pattern(self.pattern)
         self.state = np.zeros(shape=(self.size, self.size), dtype='uint8')
         self.prev_reward = 0
-
+        self._frames = 0
         self.done = False
 
         # head_x = self.snake_head[0]
@@ -291,7 +294,7 @@ class SnakeEnv2(gym.Env):
         return obs
 
     def use_pattern(self, pattern: Pattern):
-        print("use pattern in Q")
+        # print("use pattern in Q")
         if pattern is None:
             return
         self.pattern = pattern

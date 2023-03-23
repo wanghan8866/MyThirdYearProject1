@@ -22,6 +22,7 @@ class TrainingWindow(ctk.CTkToplevel):
                  **kwargs):
         super().__init__(master, *args, **kwargs)
         self.title("Test")
+        print("settings in train window", settings)
         # self.geometry("400x400")
         # self.resizable(False, False)
         # label = ctk.CTkLabel(self, text="window")
@@ -97,12 +98,23 @@ class TrainingWindow(ctk.CTkToplevel):
             font=ctk.CTkFont(size=15, weight="bold"))
         self.which_one.grid(row=current_row + 6, column=0, sticky="nsew")
 
+        self.speed_label = ctk.CTkLabel(
+            self.stats_frame,
+            text=f"Game Speed: in ms per frame",
+            anchor="w",
+            font=ctk.CTkFont(size=15, weight="bold"))
+        self.speed_label.grid(row=3, column=1, sticky="nsew")
+        self.speed_entry = ctk.CTkEntry(
+            self.stats_frame,
+            placeholder_text=f"{speed}",
+            font=ctk.CTkFont(size=15, weight="bold"))
+        self.speed_entry.grid(row=4, column=1, sticky="nsew")
+
         self.graph_frame = ctk.CTkFrame(self)
         self.graph_frame.grid(row=1, column=0, columnspan=2)
 
         fig = Figure(figsize=(10, 5),
                      dpi=100)
-
 
         # creating the Tkinter canvas
         # containing the Matplotlib figure
@@ -127,13 +139,13 @@ class TrainingWindow(ctk.CTkToplevel):
 
     def training(self):
         self.training_env.update()
-        # img = self.training_env.snake.render(mode="2d_array")
-        #
-        # self.images[0] = ImageTk.PhotoImage(image=Image.fromarray(img))
-        # # self.create_image((self.layout[i][0] * obs.shape[1], self.layout[i][1] * obs.shape[0]), anchor="nw",
-        # #                   image=self.images[0])
-        # self.game_canvas.create_image((0, 0), anchor="nw",
-        #                               image=self.images[0])
+        img = self.training_env.snake.render(mode="2d_array")
+
+        self.images[0] = ImageTk.PhotoImage(image=Image.fromarray(img))
+        # self.create_image((self.layout[i][0] * obs.shape[1], self.layout[i][1] * obs.shape[0]), anchor="nw",
+        #                   image=self.images[0])
+        self.game_canvas.create_image((0, 0), anchor="nw",
+                                      image=self.images[0])
         if self.display_nn:
             self.training_env.myCanvas.update_network()
 
@@ -164,6 +176,11 @@ class TrainingWindow(ctk.CTkToplevel):
             text=f"Iteration: {self.training_env._current_individual}",
         )
         # print(img.shape)
+        try:
+            self.speed = int(self.speed_entry.get())
+        except Exception:
+            self.speed_entry.delete(0, len(self.speed_entry.get()))
+            self.speed_entry.insert(0, self.speed)
 
         # self.training()
         self.after(self.speed, self.training)

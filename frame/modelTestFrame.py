@@ -27,8 +27,10 @@ def optionmenu_callback(choice):
 class Component(ctk.CTkFrame):
     def __init__(self, master: any, name: str, value, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
-        label = ctk.CTkLabel(self, text=splitByUnder(name) + ":", font=ctk.CTkFont(size=15, weight="bold"), anchor='w')
-        label.pack(fill="both", expand=True)
+        self.key = name
+        self.label = ctk.CTkLabel(self, text=splitByUnder(name) + ":", font=ctk.CTkFont(size=15, weight="bold"),
+                                  anchor='w')
+        self.label.pack(fill="both", expand=True)
         # print(type(value))
         if isinstance(value, SelectionType):
             self.entry = ctk.CTkOptionMenu(master=self,
@@ -56,27 +58,54 @@ class ModelTestFrame(ctk.CTkFrame):
         label = ctk.CTkLabel(self, text=name, font=ctk.CTkFont(size=15, weight="bold"))
         self.settings = settings
         self.components = []
+        self.canvas = ctk.CTkCanvas(self, borderwidth=0,
+                                    background="#373737",
+                                    height=int(self["height"]), width=int(self["width"]))
+        self.frame = ctk.CTkFrame(self.canvas, bg_color="#373737", height=int(self["height"]), width=int(self["width"]))
+        self.vsb = ctk.CTkScrollbar(self, orientation="horizontal", command=self.canvas.xview,
+                                    button_color="#0fc7e4")
+        self.canvas.configure(xscrollcommand=self.vsb.set)
+        self.name = name
+        self.label = ctk.CTkLabel(self, text=self.name + ": ")
+        self.label.pack(side="top")
+        self.vsb.pack(side="bottom", fill="x")
+        self.canvas.pack(side="left", fill="x", expand=True)
+        self.canvas.create_window((0, 0), window=self.frame, anchor="nw",
+                                  tags="self.frame")
+
+        self.frame.bind("<Configure>", self.onFrameConfigure)
 
         heights = 0
         max_height = int(self["height"])
-        current_row = 0
-        current_col = 0
+        # print("max h",max_height)
+        self.current_row = 0
+        self.current_col = 0
         for i, (key, value) in enumerate(self.settings.items()):
             # print(i, key, value)
-            component = Component(self, key, value)
-            component.grid(row=current_row, column=current_col, sticky="nsew")
+            component = Component(self.frame, key, value)
+            component.grid(row=self.current_row, column=self.current_col, sticky="nsew")
             component.update()
             heights += int(component.winfo_height())
             self.components.append(component)
 
             if heights >= max_height:
-                current_row = 0
-                current_col += 1
+                self.current_row = 0
+                self.current_col += 1
                 heights = 0
             else:
-                current_row += 1
+                self.current_row += 1
             # print(heights, max_height)
         # label.pack()
+
+    def onFrameConfigure(self, event):
+        '''Reset the scroll region to encompass the inner frame'''
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+
+    def addComponent(self, component: Component):
+        self.components.append(component)
+        component.grid(row=self.current_row, column=self.current_col, sticky="nsew")
+        component.update()
+        self.current_row += 1
 
     def getAllInputs(self):
         settings = {}
@@ -86,3 +115,9 @@ class ModelTestFrame(ctk.CTkFrame):
             settings[key] = self.components[i].get()
 
         return settings
+
+    def get_components(self, key:str):
+        for com in self.components:
+            if com.key==key:
+                return com
+        return None

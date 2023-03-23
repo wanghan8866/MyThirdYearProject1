@@ -21,8 +21,11 @@ class LinearDeepQNetwork(nn.Module):
         super(LinearDeepQNetwork, self).__init__()
         self.checkpoint_dir = chkpt_dir
         self.checkpoint_file = os.path.join(self.checkpoint_dir, name)
+        self.file_name=name
+
         # print(input_dims)
         # r4
+        print("NN", *input_dims)
         self.fc1 = nn.Linear(*input_dims, 32)
         self.fc2 = nn.Linear(32, 64)
         self.q = nn.Linear(64, n_actions)
@@ -53,12 +56,16 @@ class LinearDeepQNetwork(nn.Module):
 
         return q
 
-    def save_checkpoint(self):
-        print("... save ...")
+    def save_checkpoint(self, generation:int,score:int):
+        print(f"... save ... at {self.checkpoint_file}")
+        folder = os.path.join(self.checkpoint_dir, f"snake_{generation}_{score}")
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        self.checkpoint_file = os.path.join(folder, self.file_name)
         T.save(self.state_dict(), self.checkpoint_file)
 
     def load_checkpoint(self):
-        print("... load ...")
+        print(f"... load ... from {self.checkpoint_file}")
         self.load_state_dict(T.load(self.checkpoint_file))
 
 
@@ -105,6 +112,7 @@ class DeepQNetwork(nn.Module):
 
     def save_checkpoint(self):
         print("... save ...")
+
         T.save(self.state_dict(), self.checkpoint_file)
 
     def load_checkpoint(self):
@@ -133,7 +141,7 @@ if __name__ == '__main__':
         # print(b.shape)
         # print(A_prev.shape)
         z = np.dot(W, A_prev) + b
-        if i == len(weights)-2:
+        if i == len(weights) - 2:
 
             A_prev = softmax(z)
         else:
