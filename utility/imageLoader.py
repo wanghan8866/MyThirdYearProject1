@@ -12,16 +12,36 @@ class ImageLoader:
 
     @staticmethod
     def getTkImage(name: str):
-        return ImageLoader.All_Images[name]
+        return ImageLoader.All_Images.get(name, ImageLoader.All_Images["bird"])
 
     @staticmethod
     def loadAll():
         image_path = "resources/images/"
-        addresses = ["Flappy_Bird_icon.png"
+        addresses = ["Flappy_Bird_icon.png",
+                     "snake.PNG",
+                     "breakout.gif",
+                     "qbert.gif",
+                     "bank_heist.gif",
+                     "tennis.gif",
+                     "genetic-algorithms-in-python.png",
+                     "deepreinforcement.png",
+                     "A-Algorithm-Problem-02.png",
+                     "genetic-algorithms-in-python.png",
+                     "deepreinforcement.png"
                      ]
-        ImageLoader.Names = {
-            "bird"
-        }
+        ImageLoader.Names = ["bird",
+                             "Snake-gen",
+                             "Breakout",
+                             "Qbert",
+                             "BankHeist",
+                             "Tennis",
+                             "genetic Agent",
+                             "DeepQLearningSnakeAgent",
+                             "A* agent",
+                             "Genetic",
+                             "DoubleDeepQLearning"
+                             ]
+
         for address, name in zip(addresses, ImageLoader.Names):
             my_image = ctk.CTkImage(dark_image=Image.open(f"{image_path}{address}"), size=(50, 50))
             ImageLoader.All_Images[name] = my_image

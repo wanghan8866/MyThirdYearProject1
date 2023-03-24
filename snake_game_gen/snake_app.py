@@ -8,7 +8,7 @@ from nn_viz import NeuralNetworkViz
 from neural_network import FeedForwardNetwork, sigmoid, linear, relu
 from settings import settings
 from genetic_algorithm.population import Population
-from genetic_algorithm.selection import elitism_selection, roulette_wheel_selection, tournament_selection
+from genetic_algorithm.selection import ellitism_selection, roulette_wheel_selection, tournament_selection
 from genetic_algorithm.mutation import gaussian_mutation, random_uniform_mutation
 from genetic_algorithm.crossover import simulated_binary_crossover as SBX
 from genetic_algorithm.crossover import uniform_binary_crossover, single_point_binary_crossover

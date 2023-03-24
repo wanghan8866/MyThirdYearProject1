@@ -29,7 +29,10 @@ class TrainingMeta:
             "vision_type": SelectionType([4, 8, 16], default=8),
             "hidden_network_architecture":
                 ListType([64, 32]),
-
+            "epsilon": NumberType(0., 1., 1.),
+            "model": SelectionType(["DQN", "Double_DQN", "Double_Dueling_DQN", "Double_DQN_with_PER"], default="Double_DQN_with_PER"),
+            'interation': SelectionType(["0"], default="0"),  # Options are ['binary', 'distance'],
+            "working_directory": ListType(""),
         },
 
         "Genetic": {
@@ -104,7 +107,7 @@ class TrainingMeta:
             'apple_and_self_vision': SelectionType(["binary", "distance"], default="binary"),
             # Options are ['binary', 'distance']
             'generation': SelectionType(["0"], default="0"),  # Options are ['binary', 'distance'],
-            "working_directory":   ListType(""),
+            "working_directory": ListType(""),
         }
 
     }

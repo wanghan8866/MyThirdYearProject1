@@ -184,7 +184,7 @@ class GeneticSnakeTrainingEnv(BaseTrainingEnv):
         self.times_to_save = times
         self.model_path = path
 
-    def update(self) -> None:
+    def update(self,display=False) -> None:
         # self.snake_widget_window.update()
         # self.nn_viz_window.update()
         if self.snake.is_alive:
@@ -194,6 +194,8 @@ class GeneticSnakeTrainingEnv(BaseTrainingEnv):
         if self.snake.is_alive:
             # print("move here")
             self.snake.move()
+            if display:
+                self.myCanvas.update_network()
             # print("move after", self._current_individual )
             if self.snake.score > self.best_score:
                 self.best_score = self.snake.score

@@ -110,6 +110,21 @@ class TrainingWindow(ctk.CTkToplevel):
             font=ctk.CTkFont(size=15, weight="bold"))
         self.speed_entry.grid(row=4, column=1, sticky="nsew")
 
+        self.display_label = ctk.CTkLabel(
+            self.stats_frame,
+            text=f"Game Speed: in ms per frame",
+            anchor="w",
+            font=ctk.CTkFont(size=15, weight="bold"))
+        self.display_label.grid(row=5, column=1, sticky="nsew")
+        self.display_entry = ctk.CTkOptionMenu(
+            self.stats_frame,
+            values=["True", "False"],
+            font=ctk.CTkFont(size=15, weight="bold"),
+            command=self.select_display
+        )
+        self.display_entry.grid(row=6, column=1, sticky="nsew")
+        self.display_entry.set(str(display_nn))
+
         self.graph_frame = ctk.CTkFrame(self)
         self.graph_frame.grid(row=1, column=0, columnspan=2)
 
@@ -137,8 +152,11 @@ class TrainingWindow(ctk.CTkToplevel):
 
         self.after(self.speed, self.training)
 
+    def select_display(self, choice):
+        self.display_nn = eval(self.display_entry.get())
+
     def training(self):
-        self.training_env.update()
+        self.training_env.update(self.display_nn)
         img = self.training_env.snake.render(mode="2d_array")
 
         self.images[0] = ImageTk.PhotoImage(image=Image.fromarray(img))
@@ -146,8 +164,8 @@ class TrainingWindow(ctk.CTkToplevel):
         #                   image=self.images[0])
         self.game_canvas.create_image((0, 0), anchor="nw",
                                       image=self.images[0])
-        if self.display_nn:
-            self.training_env.myCanvas.update_network()
+        # if self.display_nn:
+        #     self.training_env.myCanvas.update_network(self.training_env.snake.observation)
 
         self.generation_label.configure(
 

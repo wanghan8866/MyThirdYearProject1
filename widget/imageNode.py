@@ -15,7 +15,8 @@ class ImageNode(ctk.CTkFrame):
         self.selected = False
         self.linker = linker
         self.name = name
-        label = ctk.CTkLabel(self, text="", image=ImageLoader.All_Images["bird"])
+        print("game name in imageNode",name)
+        label = ctk.CTkLabel(self, text="", image=ImageLoader.getTkImage(name))
         label.pack(pady=10)
         label = ctk.CTkLabel(self, text=splitByUpper(name))
         label.pack()

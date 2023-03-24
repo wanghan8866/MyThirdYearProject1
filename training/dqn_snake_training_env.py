@@ -191,7 +191,7 @@ class DQNTrainingEnv(BaseTrainingEnv):
         self.frames_per_game = 0
         self.observation = self.env.reset()
 
-    def update(self):
+    def update(self,display=False):
         if self.done:
             self.scores.append(self.score)
             self.steps_array.append(self.n_steps)
@@ -259,7 +259,8 @@ class DQNTrainingEnv(BaseTrainingEnv):
                                             reward, observation_, self.done)
                 self.agent.learn()
                 # print("learning")
-
+                if display:
+                    self.myCanvas.update_network(observation_)
                 # self.env.render(mode="human")
 
                 # sleep(0.5)

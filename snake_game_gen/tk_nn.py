@@ -23,7 +23,7 @@ class NN_canvas:
         self.height = height
         self.width = width
 
-    def update_network(self):
+    def update_network(self,obs=None):
         self.img = np.zeros((1000, 1000, 3), dtype='uint8')
         vertical_space = 8
         radius = 8

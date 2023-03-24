@@ -16,6 +16,7 @@ import json
 from window.errorbox import ErrorBox
 from training.dqn_snake_training_env import DQNTrainingEnv
 
+
 class TrainingFrame(ctk.CTkFrame):
     def __init__(self, master: any, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
@@ -120,8 +121,8 @@ class TrainingFrame(ctk.CTkFrame):
             return
         self.settings = self.frame_map[self.section1.getSelected()[0]].getAllInputs()
         # print(settings)
-        if self.section1.getSelected()[0]=="DoubleDeepQLearning":
-            self.env=DQNTrainingEnv(self.settings)
+        if self.section1.getSelected()[0] == "DoubleDeepQLearning":
+            self.env = DQNTrainingEnv(self.settings)
             TrainingWindow(self, "Snake-DQN", "", settings=self.settings, training_env=self.env, speed=1)
 
         else:
@@ -140,7 +141,8 @@ class TrainingFrame(ctk.CTkFrame):
                                                    current_gen=eval(self.settings["generation"]) + 1,
                                                    create_snake=lambda: load_snake(self.settings["working_directory"],
                                                                                    self.snake_file_names[
-                                                                                       eval(self.settings["generation"])]))
+                                                                                       eval(self.settings[
+                                                                                                "generation"])]))
 
             TrainingWindow(self, "Snake-gen", "", settings=self.settings, training_env=self.env, speed=1)
 
@@ -150,9 +152,11 @@ class TrainingFrame(ctk.CTkFrame):
         for frame in self.frame_map:
             if len(self.section1.getSelected()) == 0:
                 self.frame_map[frame].pack_forget()
+                self.env = None
                 continue
             if self.section1.getSelected()[0] == frame:
                 print("selected")
                 self.frame_map[frame].pack(fill="both")
             else:
+                self.env = None
                 self.frame_map[frame].pack_forget()

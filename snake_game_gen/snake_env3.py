@@ -149,6 +149,7 @@ class Snake(Individual, Env):
             self.observation_space = spaces.Box(low=-500, high=500,
                                                 shape=self.vision_as_array.shape, dtype=np.float64)
             self.pattern = pattern
+            self.observation=None
 
     @property
     def fitness(self):
