@@ -183,7 +183,7 @@ class MainWindow(QtWidgets.QMainWindow):
         for individual in self.population.individuals:
             individual.calculate_fitness()
 
-        self.population.individuals = elitism_selection(self.population, self.settings['num_parents'])
+        self.population.individuals = ellitism_selection(self.population, self.settings['num_parents'])
 
         random.shuffle(self.population.individuals)
         next_pop: List[Snake] = []

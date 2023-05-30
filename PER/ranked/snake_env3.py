@@ -291,6 +291,61 @@ class SnakeEnv3(gym.Env):
         # print("obs", observation)
         return self.observation, self.total_reward, self.done, info
 
+    def look_in_direction(self, slope: Slope) -> Tuple[Vision, DrawableVision]:
+        dist_to_wall = None
+        dist_to_apple = np.inf
+        dist_to_self = np.inf
+
+        wall_location = None
+        apple_location = None
+        self_location = None
+
+        position = self.snake_array[0].copy()
+        distance = 1.0
+        total_distance = 0.0
+
+        # Can't start by looking at yourself
+        position.x += slope.run
+        position.y += slope.rise
+        total_distance += distance
+        body_found = False  # Only need to find the first occurance since it's the closest
+        food_found = False  # Although there is only one food, stop looking once you find it
+
+        # Keep going until the position is out of bounds
+        while self._within_wall(position):
+            if not body_found and self._is_body_location(position):
+                dist_to_self = total_distance
+                self_location = position.copy()
+                body_found = True
+                self.intersections.append(self_location)
+            if not food_found and self._is_apple_location(position):
+                dist_to_apple = total_distance
+                apple_location = position.copy()
+                self.intersections.append(apple_location)
+                food_found = True
+
+            wall_location = position
+            position.x += slope.run
+            position.y += slope.rise
+            total_distance += distance
+        assert (total_distance != 0.0)
+
+        # @TODO: May need to adjust numerator in case of VISION_16 since step size isn't always going to be on a tile
+        dist_to_wall = 1.0 / total_distance
+
+        if self.apple_and_self_vision == 'binary':
+            dist_to_apple = 1.0 if dist_to_apple != np.inf else 0.0
+            dist_to_self = 1.0 if dist_to_self != np.inf else 0.0
+
+        elif self.apple_and_self_vision == 'distance':
+            dist_to_apple = 1.0 / dist_to_apple
+            dist_to_self = 1.0 / dist_to_self
+
+        vision = Vision(dist_to_wall, dist_to_apple, dist_to_self)
+        drawable_vision = DrawableVision(wall_location, apple_location, self_location)
+        # drawable_vision = None
+        self.intersections.append(wall_location)
+        return (vision, drawable_vision)
     def look(self):
         x = self.snake_position[0][0]
         y = self.snake_position[0][1]
@@ -318,6 +373,7 @@ class SnakeEnv3(gym.Env):
             *self.look_at_direction_16((x, y), (x - dy2, self.max_index)),
             *self.look_at_direction((x, y), (-1, 1)),
             *self.look_at_direction_16((x, y), (0, y + dx1)),
+
             *self.look_at_direction((x, y), (-1, 0)),
             *self.look_at_direction_16((x, y), (0, y - dx1)),
             *self.look_at_direction((x, y), (-1, -1)),

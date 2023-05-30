@@ -544,7 +544,7 @@ class Snake(Individual, Env):
         return snake
 
     def render(self, mode="human", drawing_vision=True, path=None):
-        size = 40
+        size = 25
         self.look()
         self.img = np.zeros((self.board_size[0] * size, self.board_size[0] * size, 3), dtype='uint8')
         half = size // 2

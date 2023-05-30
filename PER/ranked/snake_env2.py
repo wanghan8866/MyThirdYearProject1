@@ -163,7 +163,8 @@ class SnakeEnv2(gym.Env):
 
         # self.total_reward = ((75 - euclidean_dist_to_apple) + apple_reward + death_reward) / 100
         # print(euclidean_dist_to_apple)
-        self.total_reward = apple_reward + death_reward
+        # self.total_reward = apple_reward + death_reward
+        self.total_reward = len(self.snake_position)
 
         # print(self.total_reward)
 
@@ -319,7 +320,7 @@ class SnakeEnv2(gym.Env):
         #         #     value = 4
         #         print(value, end=", ")
         #     print()
-        size = 40
+        size = 25
         self.img = np.zeros((self.size * size, self.size * size, 3), dtype='uint8')
         cv2.rectangle(self.img, (self.apple_position[0] * size, self.apple_position[1] * size),
                       (self.apple_position[0] * size + size, self.apple_position[1] * size + size), (255, 0, 0), -1,
