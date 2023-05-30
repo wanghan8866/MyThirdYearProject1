@@ -1,23 +1,23 @@
 import math
 
 import numpy as np
-from snake_game_gen.settings import settings as GLOBAL_SETTINGS
-from snake_game_gen.genetic_algorithm.individual import Individual
-from snake_game_gen.genetic_algorithm.population import Population
-from snake_game_gen.snake_env3 import Snake, save_snake
+from agents. snake_game_gen.settings import settings as GLOBAL_SETTINGS
+from agents. snake_game_gen.genetic_algorithm.individual import Individual
+from agents. snake_game_gen.genetic_algorithm.population import Population
+from agents. snake_game_gen.snake_env3 import Snake, save_snake
 from typing import List, Tuple, Dict, Union, Optional
-from snake_game_gen.genetic_algorithm.selection import ellitism_selection, roulette_wheel_selection, \
+from agents. snake_game_gen.genetic_algorithm.selection import ellitism_selection, roulette_wheel_selection, \
     tournament_selection
-from snake_game_gen.genetic_algorithm.mutation import gaussian_mutation, random_uniform_mutation
-from snake_game_gen.genetic_algorithm.crossover import simulated_binary_crossover as SBX
-from snake_game_gen.genetic_algorithm.crossover import uniform_binary_crossover, single_point_binary_crossover
+from agents. snake_game_gen.genetic_algorithm.mutation import gaussian_mutation, random_uniform_mutation
+from agents. snake_game_gen.genetic_algorithm.crossover import simulated_binary_crossover as SBX
+from agents. snake_game_gen.genetic_algorithm.crossover import uniform_binary_crossover, single_point_binary_crossover
 import random
-from snake_game_gen.Win_counter import WinCounter
+from agents. snake_game_gen.Win_counter import WinCounter
 from time import time
 import csv
 import os
 from training.base_training_env import BaseTrainingEnv
-from snake_game_gen.tk_nn import NN_canvas
+from agents. snake_game_gen.tk_nn import NN_canvas
 
 
 def _calc_stats(data: List[Union[int, float]]) -> Tuple[float, float, float, float, float]:

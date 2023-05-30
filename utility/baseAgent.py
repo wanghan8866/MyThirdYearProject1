@@ -1,18 +1,12 @@
-from utility.envCreator import EnvCreator
-from stable_baselines3 import A2C
 from stable_baselines3.common.env_util import make_atari_env
 from stable_baselines3.common.vec_env import VecFrameStack
-from stable_baselines3.common.sb2_compat.rmsprop_tf_like import RMSpropTFLike
-import os, sys
-import gym
-from agents.duelingDDQN.util import make_env
+import os
 from agents.duelingDDQN.dueling_ddpn_agent import DuelingDDQNAgent
-from snake_game_gen.snake_env3 import Snake
-from snake_game_gen.path_finding import Mixed
-from snake_game_gen.misc import *
-from snake_game_gen.tk_nn import NN_canvas
-from PER.ranked.agent import DQNAgent
-from PER.ranked.deepQ_nn_vis import Q_NN_canvas
+from agents.snake_game_gen.path_finding import Mixed
+from agents.snake_game_gen.misc import *
+from agents.snake_game_gen.tk_nn import NN_canvas
+from agents.PER.ranked.agent import DQNAgent
+from agents.PER.ranked.deepQ_nn_vis import Q_NN_canvas
 
 class BaseAgent:
     def __init__(self, game_name, env):
@@ -183,7 +177,7 @@ class DeepQSnakeAgent(BaseAgent):
                      n_actions=env.action_space.n, mem_size=50 * 1024,
                      eps_min=0.01,
                      batch_size=64, replace=replace, eps_dec=1e-4,
-                     chkpt_dir='PER/ranked/models/', algo='DQNAgent_ranked',
+                     chkpt_dir='agents/PER/ranked/models/', algo='DQNAgent_ranked',
                      env_name=env_id)
         self.agent.load_models()
         self.myCanvas = Q_NN_canvas(None, network=self.agent.q_eval, bg="white", height=1000, width=1000)

@@ -9,7 +9,7 @@ import time
 from collections import deque
 from matplotlib import pyplot as plt
 from typing import Tuple
-from snake_game_gen.patterns import Pattern
+from agents.snake_game_gen.patterns import Pattern
 
 SNAKE_LEN_GOAL = 30
 

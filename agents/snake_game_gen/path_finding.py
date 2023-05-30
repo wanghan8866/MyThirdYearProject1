@@ -1,6 +1,6 @@
-import snake_game_gen.snake
-from snake_game_gen.misc import *
-from snake_game_gen.snake_env3 import Snake
+import agents.snake_game_gen.snake
+from agents.snake_game_gen.misc import *
+from agents.snake_game_gen.snake_env3 import Snake
 from copy import deepcopy
 
 

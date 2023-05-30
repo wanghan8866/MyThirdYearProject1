@@ -2,35 +2,28 @@
 import customtkinter as tk
 import numpy as np
 import colorsys
-from PER.ranked.network import LinearDeepQNetwork, softmax, relu
+from agents.snake_game_gen.snake_env import Snake, load_snake
+from agents.snake_game_gen.settings import settings
 import time
 import cv2
-import torch as T
 
 tk.set_default_color_theme("dark-blue")
 
 
-class Q_NN_canvas:
-    def __init__(self, parent, network: LinearDeepQNetwork, bg, width, height, *args, **kwargs):
+class NN_canvas:
+    def __init__(self, parent, snake: Snake, bg, width, height, *args, **kwargs):
         # super().__init__(parent, *args, **kwargs)
         self.bg = bg
-        self.network = network
+        self.snake = snake
         self.horizontal_distance_between_layers = 50
         self.vertical_distance_between_nodes = 10
-        # print()
-        self.layers = []
-        for t in list(network.parameters())[::2]:
-            self.layers.append(t.cpu().detach().numpy().shape[0])
-        # print(self.layers)
-        self.weights = list(self.network.parameters())
-
-        self.num_neurons_in_largest_layer = max(self.layers)
+        self.num_neurons_in_largest_layer = max(self.snake.network.layer_nodes)
         self.neuron_locations = {}
         self.img = np.zeros((1000, 10000, 3), dtype='uint8')
         self.height = height
         self.width = width
 
-    def update_network(self, obs):
+    def update_network(self,obs=None):
         self.img = np.zeros((1000, 1000, 3), dtype='uint8')
         vertical_space = 8
         radius = 8
@@ -38,41 +31,19 @@ class Q_NN_canvas:
         height = self.height
         width = self.width
         # width = int(self["width"])
-        layer_nodes = self.layers
+        layer_nodes = self.snake.network.layer_nodes
         default_offset = 30
         h_offset = default_offset
-        inputs = obs
-        state = T.tensor(np.array([inputs]), dtype=T.float).to(self.network.device)
-        out = self.network.forward(state)
-        max_out = T.argmax(out).item()
+        inputs = self.snake.vision_as_array
+        out = self.snake.network.feed_forward(inputs)
+        max_out = np.argmax(out)
         # print(layer_nodes)
-        A_prev = obs
-        params = {}
-        x = 0
-        for i in range(0, len(self.weights), 2):
-            W = self.weights[i].cpu().detach().numpy()
-            b = np.array([[w] for w in self.weights[i + 1].cpu().detach().numpy()])
-            # print(W.shape)
-            # print(b.shape)
-            # print(A_prev.shape)
-            z = np.dot(W, A_prev) + b
-            if i == len(self.weights) - 2:
-
-                A_prev = softmax(z)
-            else:
-                A_prev = relu(z)
-            # print(x, A_prev.shape)
-            params["W" + str(x)]=W
-            params["b" + str(x)]=b
-            params['A' + str(x)] = A_prev
-            x += 1
-
         for layer, num_nodes in enumerate(layer_nodes):
             # print(num_nodes)
             v_offset = (height - ((2 * radius + vertical_space) * num_nodes)) / 2
             activation = None
             if layer > 0:
-                activation = params["A" + str(layer)]
+                activation = self.snake.network.params["A" + str(layer)]
 
             for node in range(num_nodes):
                 x_loc = int(h_offset)
@@ -93,7 +64,7 @@ class Q_NN_canvas:
                         # colour = (0, 255, 0)
                     else:
                         colour = (125, 125, 125)
-                    text = f"{obs[node]:.2f}"
+                    text = f"{self.snake.vision_as_array[node, 0]:.2f}"
                     cv2.putText(self.img, text,
                                 (int(h_offset - 25),
                                  int(node * (radius * 2 + vertical_space) + v_offset + radius)),
@@ -112,10 +83,7 @@ class Q_NN_canvas:
                     # colour = '#%02x%02x%02x' % (colour[0], colour[1], colour[2])
                     # print(colour)
                 elif layer == len(layer_nodes) - 1:
-                    # 0 up, 1 down, 2 left, 3 right
-                    text = ["U", "D", "L", "R"][node]
-                    # text = self.snake.possible_directions[node].upper()
-                    # text = "u"
+                    text = self.snake.possible_directions[node].upper()
                     if node == max_out:
                         colour = (0, 255, 255)
 
@@ -134,7 +102,7 @@ class Q_NN_canvas:
             h_offset += 150
 
         for l in range(1, len(layer_nodes)):
-            weights = params["W" + str(l)]
+            weights = self.snake.network.params["W" + str(l)]
             # print(weights.shape)
             prev_nodes = weights.shape[1]
             curr_nodes = weights.shape[0]
@@ -155,7 +123,99 @@ class Q_NN_canvas:
                              (start[0] + radius, start[1]),
                              end,
                              colour, 1, lineType=cv2.LINE_AA)
-        # # self.update()
-        cv2.imshow('Q_n', self.img)
+        # self.update()
+        cv2.imshow('n', self.img)
 
 
+if __name__ == '__main__':
+    # init tk
+    root = tk.CTk()
+    displaying = True
+    env = load_snake("models/test_64", f"snake_1699", settings)
+    # env = Snake([10,10], hidden_layer_architecture=settings['hidden_network_architecture'],
+    #                   hidden_activation=settings['hidden_layer_activation'],
+    #                   output_activation=settings['output_layer_activation'],
+    #                   lifespan=settings['lifespan'],
+    #                   apple_and_self_vision=settings['apple_and_self_vision'])
+    # env.look()
+    # env.step(action=-1)
+    # create canvas
+    myCanvas=None
+    if displaying:
+        myCanvas = NN_canvas(root, snake=env, bg="white", height=1000, width=1000)
+    # env = load_snake("models/tests", f"snake_1400", settings)
+    # It will check your custom environment and output additional warnings if needed
+    # check_env(env)
+    episodes = 100
+    rewards_history = []
+    avg_reward_history = []
+    print(env.observation_space.shape)
+    # myCanvas.pack()
+    for episode in range(episodes):
+        # if episode == 41:
+        #     myCanvas = NN_canvas(root, snake=env, bg="white", height=1000, width=1000)
+        #     displaying=True
+        done = False
+        obs = env.reset()
+        rewards = 0
+        while not done:
+            if displaying:
+                action = env.possible_directions[env.action_space.sample()]
+                t_end = time.time() + 0.1
+                k =  -1
+                # action = -1
+                while time.time() < t_end:
+                    if k == -1:
+                        # pass
+                        k = cv2.waitKey(1)
+                        # print(k)
+
+                        if k == 97:
+                            action = "l"
+                        elif k == 100:
+                            action = "r"
+                        elif k == 119:
+                            action = "u"
+                        elif k == 115:
+                            action = "d"
+                        # print(k)
+                    else:
+                        continue
+                # print(f"action: {action}")
+                env.render()
+                myCanvas.update_network()
+            action = -1
+
+            obs, reward, done, info = env.step(action)
+            # print("obs", obs)
+            #
+            # root.update()
+
+            # A=env.render(mode="rgb_array")
+            # print(A.shape)
+            # print("reward", reward)
+
+            # print(obs.shape)
+            rewards += reward
+        # print(env.steps_history)
+        # print(len(env.steps_history))
+
+        # rewards_history.append(rewards)
+        avg_reward = (len(env.snake_array))
+        avg_reward_history.append(avg_reward)
+        env.calculate_fitness()
+        print(f"games: {episode + 1}, avg_score: {avg_reward} fit: {env.fitness}")
+        print(f"games: {episode + 1}, avg_score: {env.steps_history}")
+        print(f"games: {episode + 1}, avg_score: {env.steps_history}")
+        if len(env.steps_history)>0:
+            print(f"games: {episode + 1}, avg_score: {np.mean(env.steps_history)}\n")
+        else:
+            print()
+
+    # draw arcs
+    print()
+    print(f"games: average reward over {episodes} games: {np.mean(avg_reward_history)}")
+    print(f"games: std reward over {episodes} games: {np.std(avg_reward_history)}")
+    # add to window and show
+
+    # root.mainloop()

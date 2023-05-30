@@ -8,7 +8,7 @@ from training.genetic_snake_training_env import load_stats
 from PIL import Image, ImageTk
 from utility.nameSplitor import splitByUnder
 from time import time
-from snake_game_gen.Win_counter import WinCounter
+from agents. snake_game_gen.Win_counter import WinCounter
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
                                                NavigationToolbar2Tk)

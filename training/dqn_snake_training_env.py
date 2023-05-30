@@ -1,13 +1,12 @@
 from training.base_training_env import BaseTrainingEnv
 import gym
 import numpy as np
-from PER.ranked.agent import DQNAgent
+from agents.PER.ranked.agent import DQNAgent
 # from PER.ranked.snake_env5 import SnakeEnv5
-from time import time, sleep
-import cv2
+from time import time
 import collections
-from PER.ranked.deepQ_nn_vis import Q_NN_canvas
-from PER.ranked.snake_env2 import SnakeEnv2
+from agents.PER.ranked.deepQ_nn_vis import Q_NN_canvas
+from agents.PER.ranked.snake_env2 import SnakeEnv2
 import csv
 from typing import List, Union, Tuple
 import os

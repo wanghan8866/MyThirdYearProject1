@@ -100,11 +100,11 @@ class Snakes(Snake):
 
 if __name__ == '__main__':
     env = Snakes(settings["board_size"],
-                        "models/test_64",
+                 "models/test_64",
                         f"snake_1000",
-                        number_rounds=10,
+                 number_rounds=10,
                  loading=True
-                        )
+                 )
 
     while True:
         env.move()

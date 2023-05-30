@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from snake_game_gen.misc import Point
+from agents.snake_game_gen.misc import Point
 import numpy as np
 
 

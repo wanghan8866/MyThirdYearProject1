@@ -1,13 +1,10 @@
 import gym
-import flappy_bird_gym
 from meta.appMeta import AppMeta
-from stable_baselines3.common.env_util import make_atari_env
-from stable_baselines3.common.vec_env import VecFrameStack
 from agents.duelingDDQN.util import make_env
-from snake_game_gen.snake_env3 import Snake, load_snake
-from snake_game_gen.settings import settings
-from PER.ranked.snake_env2 import SnakeEnv2
-from snake_game_gen.patterns import Pattern
+from agents.snake_game_gen.snake_env3 import load_snake
+from agents.snake_game_gen.settings import settings
+from agents.PER.ranked.snake_env2 import SnakeEnv2
+from agents.snake_game_gen.patterns import Pattern
 class EnvCreator:
 
     @staticmethod
@@ -38,7 +35,7 @@ class EnvCreator:
                 env.use_pattern(Pattern(pattern))
             return env
         elif name == "Snake-gen":
-            env = load_snake("snake_game_gen/models/test_64", f"snake_1699", settings,)
+            env = load_snake("agents/snake_game_gen/models/test_64", f"snake_1699", settings,)
             if pattern is not None:
                 print("use pattern")
                 env.use_pattern(Pattern(pattern))

@@ -11,13 +11,13 @@ import json
 from gym import spaces
 import cv2
 import time
-from snake_game_gen.misc import *
-from snake_game_gen.genetic_algorithm.individual import Individual
-from snake_game_gen.neural_network import FeedForwardNetwork, linear, sigmoid, tanh, relu, leaky_relu, ActivationFunction, \
+from agents.snake_game_gen.misc import *
+from agents.snake_game_gen.genetic_algorithm.individual import Individual
+from agents.snake_game_gen.neural_network import FeedForwardNetwork, linear, sigmoid, tanh, relu, leaky_relu, ActivationFunction, \
     get_activation_by_name
 from stable_baselines3.common.env_checker import check_env
 from matplotlib import pyplot as plt
-from snake_game_gen.Win_counter import WinCounter
+from agents.snake_game_gen.Win_counter import WinCounter
 class Vision(object):
     __slots__ = ('dist_to_wall', 'dist_to_apple', 'dist_to_self')
 
@@ -607,7 +607,7 @@ def load_snake(population_folder: str, individual_name: str,
                   apple_and_self_vision=settings['apple_and_self_vision']
                   )
     return snake
-from snake_game_gen.settings import settings
+from agents.snake_game_gen.settings import settings
 PRINT_NUM = 10
 if __name__ == '__main__':
     #

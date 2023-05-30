@@ -1,7 +1,7 @@
 import numpy as np
 import torch as T
-from PER.ranked.network import LinearDeepQNetwork, DeepQNetwork
-from PER.ranked.memory import MaxHeap
+from agents.PER.ranked.network import LinearDeepQNetwork
+from agents.PER.ranked.memory import MaxHeap
 
 
 class DQNAgent:

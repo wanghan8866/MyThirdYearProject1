@@ -9,9 +9,9 @@ from window.gameWindow import GameWindow
 from window.errorbox import ErrorBox
 from customtkinter import filedialog
 import os
-from snake_game_gen.patterns import Pattern
+from agents. snake_game_gen.patterns import Pattern
 
-from snake_game_gen.snake_env3 import load_snake
+from agents. snake_game_gen.snake_env3 import load_snake
 
 
 def load_snake_testing(pattern, directory, name):

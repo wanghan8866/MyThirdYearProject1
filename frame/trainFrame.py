@@ -10,7 +10,7 @@ from meta.trainingMeta import TrainingMeta
 from frame.modelTestFrame import ModelTestFrame
 from utility.nameSplitor import splitByUpper
 from training.genetic_snake_training_env import GeneticSnakeTrainingEnv
-from snake_game_gen.snake_env3 import load_snake
+from agents. snake_game_gen.snake_env3 import load_snake
 import os
 import json
 from window.errorbox import ErrorBox
