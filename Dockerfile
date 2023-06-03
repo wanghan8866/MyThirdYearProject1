@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM python:slim
+FROM python:3.9-slim
 WORKDIR /app_home
 
 COPY requirements.txt requirements.txt
