@@ -50,6 +50,7 @@ So, it is clear that agent name, observation type, repeats, and reward type are 
 From `models/` there are 1D observation models, and most of the 3D observation models are in this https://drive.google.com/drive/folders/1sJ08QIJcCy_irTkPALVNLcE65l1ICAtR?usp=sharing. So by default, it will likely throw errors because the corresponding 3D model does not exist, so please download the folder from the link. 
 
 "plot_learning.py" allows the user to compare the playing behaviour of different agents to generate the plot in the following. 
+![recover](./thrid/testing1.png)
 
 ### Genetic Algorithm (GA) Training
 > https://github.com/wanghan8866/SnakeAI
