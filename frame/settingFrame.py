@@ -1,8 +1,6 @@
-import tkinter as tk
-from meta.appMeta import AppMeta
-from utility.imageLoader import ImageLoader
-from widget.imageNode import ImageNode
 import customtkinter as ctk
+
+from widget.imageNode import ImageNode
 
 
 class SettingFrame(ctk.CTkFrame):

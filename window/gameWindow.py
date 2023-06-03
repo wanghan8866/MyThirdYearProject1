@@ -1,6 +1,7 @@
 import customtkinter as ctk
-from widget.gameCanvas import GameCanvas
+
 from utility.nameSplitor import splitByUpper
+from widget.gameCanvas import GameCanvas
 
 
 class GameWindow(ctk.CTkToplevel):
@@ -23,7 +24,7 @@ class GameWindow(ctk.CTkToplevel):
 
             name = ctk.CTkLabel(frame, text=splitByUpper(agent))
             name.pack()
-            if agent=="genetic Agent":
+            if agent == "genetic Agent":
                 print("creating existing snake")
                 game = GameCanvas(frame, game_name=games[0], agent_name=agent, background="black", pattern=pattern,
                                   create_env=create_snake)

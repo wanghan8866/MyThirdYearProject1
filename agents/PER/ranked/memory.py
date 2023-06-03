@@ -1,6 +1,7 @@
 from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import List
+
 import numpy as np
 
 
@@ -61,8 +62,8 @@ class MaxHeap:
         array = deepcopy(self.array)
         indices = [i for i in range(len(array))]
         sorted_array = [list(x) for x in zip(*sorted(zip(array, indices),
-                        key=lambda pair: pair[0],
-                        reverse=True))]
+                                                     key=lambda pair: pair[0],
+                                                     reverse=True))]
 
         for index, value in enumerate(sorted_array[1]):
             self.array[value].rank = index + 1
@@ -90,7 +91,7 @@ class MaxHeap:
     def _build_max_heap(self):
         array = deepcopy(self.array)
         N = len(array)
-        for i in range(N//2, -1, -1):
+        for i in range(N // 2, -1, -1):
             array = self._max_heapify(array, i)
         return array
 
@@ -118,7 +119,7 @@ class MaxHeap:
         for start_idx in start:
             bs = start_idx // n_batches
             indices = np.array([[j * bs + k for k in range(bs)]
-                               for j in range(n_batches)], dtype=np.int16)
+                                for j in range(n_batches)], dtype=np.int16)
             self.indices.append(indices)
 
     def compute_probs(self):
@@ -128,14 +129,14 @@ class MaxHeap:
         for indices in self.indices[idx]:
             probs = []
             for index in indices:
-                p = 1 / (self.array[index].rank)**self.alpha
+                p = 1 / (self.array[index].rank) ** self.alpha
                 probs.append(p)
             z = [p / sum(probs) for p in probs]
             self.probs.append(z)
 
     def _calculate_weights(self, probs: List):
-        weights = np.array([(1 / self.mem_cntr * 1 / prob)**self.beta
-                           for prob in probs])
+        weights = np.array([(1 / self.mem_cntr * 1 / prob) ** self.beta
+                            for prob in probs])
         weights *= 1 / (max(weights))
         return weights
 

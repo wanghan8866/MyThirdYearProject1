@@ -1,8 +1,7 @@
-import tkinter as tk
-from meta.appMeta import AppMeta
-from utility.imageLoader import ImageLoader
-import customtkinter as ctk
 import math
+
+import customtkinter as ctk
+
 from meta.trainingMeta import SelectionType, ListType, NumberType
 from utility.nameSplitor import splitByUnder
 
@@ -116,8 +115,8 @@ class ModelTestFrame(ctk.CTkFrame):
 
         return settings
 
-    def get_components(self, key:str):
+    def get_components(self, key: str):
         for com in self.components:
-            if com.key==key:
+            if com.key == key:
                 return com
         return None

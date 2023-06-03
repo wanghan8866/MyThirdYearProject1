@@ -1,12 +1,15 @@
+import os
+
 from stable_baselines3.common.env_util import make_atari_env
 from stable_baselines3.common.vec_env import VecFrameStack
-import os
-from agents.duelingDDQN.dueling_ddpn_agent import DuelingDDQNAgent
-from agents.snake_game_gen.path_finding import Mixed
-from agents.snake_game_gen.misc import *
-from agents.snake_game_gen.tk_nn import NN_canvas
+
 from agents.PER.ranked.agent import DQNAgent
 from agents.PER.ranked.deepQ_nn_vis import Q_NN_canvas
+from agents.duelingDDQN.dueling_ddpn_agent import DuelingDDQNAgent
+from agents.snake_game_gen.misc import *
+from agents.snake_game_gen.path_finding import Mixed
+from agents.snake_game_gen.tk_nn import NN_canvas
+
 
 class BaseAgent:
     def __init__(self, game_name, env):
@@ -90,6 +93,7 @@ class SnakeGeneticAgent(BaseAgent):
     def predict(self, state, action_space, action):
         # print("predicted action", self.agent.possible_directions[self.agent.action_space.sample()] )
         return -1
+
     def render(self):
         # self.nn.update_network()
         return self.env.render(mode="rgb_array")
@@ -99,12 +103,12 @@ class AStarSnakeAgent(BaseAgent):
     def __init__(self, game_name, env):
         super().__init__(game_name, env)
         self.agent = env
-        self.path=[]
+        self.path = []
 
     def predict(self, state, action_space, action):
         # print("predicted action", self.agent.possible_directions[self.agent.action_space.sample()] )
         path = Mixed(self.agent, self.agent.apple_location).run_mixed()
-        self.path =path
+        self.path = path
         # print("path: ", path)
         if path is None:
             action = -1
@@ -161,7 +165,6 @@ class HumanSnakeAgent(BaseAgent):
         return self.env.render(mode="rgb_array", drawing_vision=False)
 
 
-
 class DeepQSnakeAgent(BaseAgent):
     def __init__(self, game_name, env):
         super().__init__(game_name, env)
@@ -172,26 +175,25 @@ class DeepQSnakeAgent(BaseAgent):
         replace = 250
         epsilon = 0
         self.agent = DQNAgent(gamma=0.99, epsilon=epsilon, lr=2.5e-4, alpha=alpha,
-                     beta=beta, r_iter=r_iter,
-                     input_dims=(env.observation_space.shape),
-                     n_actions=env.action_space.n, mem_size=50 * 1024,
-                     eps_min=0.01,
-                     batch_size=64, replace=replace, eps_dec=1e-4,
-                     chkpt_dir='agents/PER/ranked/models/', algo='DQNAgent_ranked',
-                     env_name=env_id)
+                              beta=beta, r_iter=r_iter,
+                              input_dims=(env.observation_space.shape),
+                              n_actions=env.action_space.n, mem_size=50 * 1024,
+                              eps_min=0.01,
+                              batch_size=64, replace=replace, eps_dec=1e-4,
+                              chkpt_dir='agents/PER/ranked/models/', algo='DQNAgent_ranked',
+                              env_name=env_id)
         self.agent.load_models()
         self.myCanvas = Q_NN_canvas(None, network=self.agent.q_eval, bg="white", height=1000, width=1000)
 
     def predict(self, state, action_space, action):
         # print("predicted action", self.agent.possible_directions[self.agent.action_space.sample()] )
         # path = Mixed(self.agent, self.agent.apple_location).run_mixed()
-            # return "d"
+        # return "d"
         # self.myCanvas.update_network(state)
         return self.agent.choose_action(state)
 
     def render(self):
         return self.env.render(mode="rgb_array")
-
 
 
 if __name__ == '__main__':

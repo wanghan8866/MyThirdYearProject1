@@ -1,10 +1,13 @@
 import gym
-from meta.appMeta import AppMeta
-from agents.duelingDDQN.util import make_env
-from agents.snake_game_gen.snake_env3 import load_snake
-from agents.snake_game_gen.settings import settings
+
 from agents.PER.ranked.snake_env2 import SnakeEnv2
+from agents.duelingDDQN.util import make_env
 from agents.snake_game_gen.patterns import Pattern
+from agents.snake_game_gen.settings import settings
+from agents.snake_game_gen.snake_env3 import load_snake
+from meta.appMeta import AppMeta
+
+
 class EnvCreator:
 
     @staticmethod
@@ -29,13 +32,13 @@ class EnvCreator:
             game_name = "ALE/Tennis-v5"
         elif agent_name == "DeepQLearningSnakeAgent" and name == "Snake-gen":
             # print("DeepQLearningSnakeAgent")
-            env=SnakeEnv2(10)
+            env = SnakeEnv2(10)
             if pattern is not None:
                 print("use pattern")
                 env.use_pattern(Pattern(pattern))
             return env
         elif name == "Snake-gen":
-            env = load_snake("agents/snake_game_gen/models/test_64", f"snake_1699", settings,)
+            env = load_snake("agents/snake_game_gen/models/test_64", f"snake_1699", settings, )
             if pattern is not None:
                 print("use pattern")
                 env.use_pattern(Pattern(pattern))

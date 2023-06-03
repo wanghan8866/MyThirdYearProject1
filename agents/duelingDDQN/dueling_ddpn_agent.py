@@ -1,8 +1,8 @@
 import numpy as np
 import torch as T
+
 from agents.duelingDDQN.dueling_deep_q_network import DuelingDeepQNetwork
 from agents.duelingDDQN.replay_memory import ReplayBuffer
-from agents.duelingDDQN.util import plot_learning_curve
 
 
 class DuelingDDQNAgent:
@@ -86,11 +86,11 @@ class DuelingDDQNAgent:
         V, A = self.q_eval.forward(states)
         new_V, new_A = self.q_next.forward(new_states)
         V_eval, A_eval = self.q_eval.forward(new_states)
-     
+
         q_pred = T.add(V, (A - A.mean(dim=1, keepdim=True)))[indices, actions]
         q_next = T.add(new_V, (new_A - new_A.mean(dim=1, keepdim=True)))
-        q_eval = T.add(V_eval, (A_eval-A_eval.mean(dim=1, keepdim=True)))
-        max_actions= T.argmax(q_eval, dim=1)
+        q_eval = T.add(V_eval, (A_eval - A_eval.mean(dim=1, keepdim=True)))
+        max_actions = T.argmax(q_eval, dim=1)
 
         q_next[dones] = 0.
         # print(dones.item())

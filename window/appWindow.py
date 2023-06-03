@@ -1,12 +1,12 @@
-import tkinter as tk
-from meta.appMeta import AppMeta
-from utility.imageLoader import ImageLoader
 import customtkinter as ctk
+
 from frame.homeFrame import HomeFrame
 from frame.settingFrame import SettingFrame
-from frame.trainFrame import TrainingFrame
 from frame.singleFrame import SinglePlayerFrame
 from frame.testingFrame import TestingFrame
+from frame.trainFrame import TrainingFrame
+from meta.appMeta import AppMeta
+from utility.imageLoader import ImageLoader
 
 
 class AppWindow(ctk.CTk):
@@ -52,15 +52,13 @@ class AppWindow(ctk.CTk):
                                           image=ImageLoader.getTkImage("chat"), anchor="w",
                                           command=lambda: self.select_frame_by_name("train"))
 
-
         self.multi_button.grid(row=3, column=0, sticky="ew")
 
-
         self.test_button = ctk.CTkButton(self.navigation_frame, corner_radius=0, height=40,
-                                            border_spacing=10, text="Experimenting", fg_color="transparent",
-                                            text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                            image=ImageLoader.getTkImage("user"), anchor="w",
-                                            command=lambda: self.select_frame_by_name("test"))
+                                         border_spacing=10, text="Experimenting", fg_color="transparent",
+                                         text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
+                                         image=ImageLoader.getTkImage("user"), anchor="w",
+                                         command=lambda: self.select_frame_by_name("test"))
 
         self.test_button.grid(row=4, column=0, sticky="ew")
 
@@ -71,7 +69,6 @@ class AppWindow(ctk.CTk):
                                             command=lambda: self.select_frame_by_name("setting"))
 
         self.setting_button.grid(row=5, column=0, sticky="ew")
-
 
         self.home_frame = HomeFrame(self, corner_radius=0, fg_color="transparent")
         self.single_frame = SinglePlayerFrame(self, corner_radius=0, fg_color="transparent")
@@ -109,4 +106,3 @@ class AppWindow(ctk.CTk):
             self.setting_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.setting_frame.grid_forget()
-

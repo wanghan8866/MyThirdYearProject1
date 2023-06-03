@@ -1,7 +1,7 @@
-import tkinter as tk
+import os
+
 import customtkinter as ctk
 from PIL import Image
-import os
 
 
 class ImageLoader:

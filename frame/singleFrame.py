@@ -1,9 +1,7 @@
-import tkinter as tk
-from meta.appMeta import AppMeta
-from utility.imageLoader import ImageLoader
 import customtkinter as ctk
-from widget.selectSection import SelectSection
+
 from meta.appMeta import AppMeta
+from widget.selectSection import SelectSection
 from window.gameWindow import GameWindow
 
 

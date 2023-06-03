@@ -1,10 +1,11 @@
 import collections
 
+import cv2
+import flappy_bird_gym
 import gym
 import matplotlib.pyplot as plt
 import numpy as np
-import cv2
-import flappy_bird_gym
+
 
 def plot_learning_curve(x, scores, eps_history, file_name="none", N=100):
     fig: plt.Figure = plt.figure()
@@ -133,4 +134,4 @@ if __name__ == '__main__':
         array = env.render(mode="rgb_array")
         print(array.shape)
         # print(obs.shape)
-        print(np.sum(array)/255)
+        print(np.sum(array) / 255)

@@ -1,9 +1,9 @@
 {
-    "apple_seed": 261617449,
-    "initial_velocity": null,
-    "start_pos": {
-        "x": 2,
-        "y": 2
-    },
-    "starting_direction": "d"
+  "apple_seed": 261617449,
+  "initial_velocity": null,
+  "start_pos": {
+    "x": 2,
+    "y": 2
+  },
+  "starting_direction": "d"
 }

@@ -1,7 +1,8 @@
 import numpy as np
 import torch as T
-from agents.PER.ranked.network import LinearDeepQNetwork
+
 from agents.PER.ranked.memory import MaxHeap
+from agents.PER.ranked.network import LinearDeepQNetwork
 
 
 class DQNAgent:
@@ -24,8 +25,8 @@ class DQNAgent:
         self.action_space = [i for i in range(n_actions)]
         self.learn_step_counter = 0
         self.rebalance_iter = r_iter
-        self.fitness=0
-        self.score=0
+        self.fitness = 0
+        self.score = 0
 
         self.memory = MaxHeap(mem_size, batch_size, alpha=alpha, beta=beta,
                               r_iter=r_iter)
@@ -88,9 +89,9 @@ class DQNAgent:
         self.epsilon = self.epsilon - self.eps_dec \
             if self.epsilon > self.eps_min else self.eps_min
 
-    def save_models(self,generation,score):
-        self.q_eval.save_checkpoint(generation,score)
-        self.q_next.save_checkpoint(generation,score)
+    def save_models(self, generation, score):
+        self.q_eval.save_checkpoint(generation, score)
+        self.q_next.save_checkpoint(generation, score)
 
     def load_models(self):
         self.q_eval.load_checkpoint()

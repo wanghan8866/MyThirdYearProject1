@@ -1,15 +1,17 @@
-from training.base_training_env import BaseTrainingEnv
-import gym
-import numpy as np
-from agents.PER.ranked.agent import DQNAgent
+import collections
+import csv
+import os
 # from PER.ranked.snake_env5 import SnakeEnv5
 from time import time
-import collections
+from typing import List, Union, Tuple
+
+import gym
+import numpy as np
+
+from agents.PER.ranked.agent import DQNAgent
 from agents.PER.ranked.deepQ_nn_vis import Q_NN_canvas
 from agents.PER.ranked.snake_env2 import SnakeEnv2
-import csv
-from typing import List, Union, Tuple
-import os
+from training.base_training_env import BaseTrainingEnv
 
 
 def _calc_stats(data: List[Union[int, float]]) -> Tuple[float, float, float, float, float]:
@@ -190,7 +192,7 @@ class DQNTrainingEnv(BaseTrainingEnv):
         self.frames_per_game = 0
         self.observation = self.env.reset()
 
-    def update(self,display=False):
+    def update(self, display=False):
         if self.done:
             self.scores.append(self.score)
             self.steps_array.append(self.n_steps)

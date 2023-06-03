@@ -1,6 +1,3 @@
-import tkinter as tk
-from meta.appMeta import AppMeta
-from utility.imageLoader import ImageLoader
 import customtkinter as ctk
 
 

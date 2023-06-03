@@ -1,19 +1,14 @@
 import math
-
-import gym
-from gym import spaces
-import numpy as np
-import cv2
 import random
-import time
-from collections import deque
-from matplotlib import pyplot as plt
 from typing import Tuple
 
+import cv2
+import gym
+import numpy as np
+from gym import spaces
+from matplotlib import pyplot as plt
 
 angle_16 = math.tan(22.5 / 180 * math.pi)
-
-import math
 
 
 def plotPixel(x1, y1, x2, y2, dx, dy, decide):
@@ -22,7 +17,7 @@ def plotPixel(x1, y1, x2, y2, dx, dy, decide):
     # and passed in plotPixel function so
     # it can handle both cases when m>1 & m<1
     pk = 2 * dy - dx
-    points=[]
+    points = []
 
     # for (int i = 0; i <= dx; i++) {
 
@@ -33,12 +28,11 @@ def plotPixel(x1, y1, x2, y2, dx, dy, decide):
     for i in range(0, dx + 1):
         if decide:
             # print(f"({y1},{x1})", end=" ")
-            points.append((y1,x1))
+            points.append((y1, x1))
 
         else:
             # print(f"({x1},{y1})", end=" ")
             points.append((x1, y1))
-
 
         # checking either to decrement or increment the
         # value if we have to plot from (0,100) to (100,0)
@@ -75,21 +69,22 @@ def plotPixel(x1, y1, x2, y2, dx, dy, decide):
 
 # Driver code
 
-def findPoints(x1,y1,x2,y2):
+def findPoints(x1, y1, x2, y2):
     dx = abs(x2 - x1)
     dy = abs(y2 - y1)
     # print(dx,dy)
     # If slope is less than one
     if (dx > dy):
         # passing argument as 0 to plot(x,y)
-        points=plotPixel(x1, y1, x2, y2, dx, dy, 0)
+        points = plotPixel(x1, y1, x2, y2, dx, dy, 0)
 
     # if slope is greater than or equal to 1
     else:
         # passing argument as 1 to plot (y,x)
-        points=plotPixel(y1, x1, y2, x2, dy, dx, 1)
+        points = plotPixel(y1, x1, y2, x2, dy, dx, 1)
     # print(points)
     return points
+
 
 class Direction:
     UP = 0
@@ -346,6 +341,7 @@ class SnakeEnv3(gym.Env):
         # drawable_vision = None
         self.intersections.append(wall_location)
         return (vision, drawable_vision)
+
     def look(self):
         x = self.snake_position[0][0]
         y = self.snake_position[0][1]
@@ -386,7 +382,7 @@ class SnakeEnv3(gym.Env):
         return obs
 
     def look_at_direction(self, current_pos, direction: Tuple[int, int]):
-        print("d",direction)
+        print("d", direction)
         x = current_pos[0] + direction[0]
         y = current_pos[1] + direction[1]
         distance = abs(direction[0]) + abs(direction[1])
@@ -403,7 +399,7 @@ class SnakeEnv3(gym.Env):
         # print((x, y), found_body, found_food, distance)
         cv2.line(self.img, (current_pos[0] * 10 + 5, current_pos[1] * 10 + 5), (x * 10 + 5, y * 10 + 5),
                  (255, 100, 100), thickness=1)
-        return distance/2./self.size, found_body, found_food
+        return distance / 2. / self.size, found_body, found_food
 
     def look_at_direction_16(self, current_pos, new_pos: Tuple[float, float]):
         print(new_pos)
@@ -433,7 +429,7 @@ class SnakeEnv3(gym.Env):
         # print((x * 10 + 5, y * 10 + 5),(x2 * 10 + 5, y2 * 10 + 5))
         cv2.line(self.img, (x * 10 + 5, y * 10 + 5), (x2 * 10 + 5, y2 * 10 + 5),
                  (255, 100, 100), thickness=1)
-        return (distance+1)/2./self.size, found_body, found_food
+        return (distance + 1) / 2. / self.size, found_body, found_food
 
     def reset(self):
         self.img = np.zeros((self.size * 10, self.size * 10, 3), dtype='uint8')
@@ -505,10 +501,10 @@ if __name__ == '__main__':
             # A=env.render(mode="rgb_array")
             # print(A.shape)
             print("reward", reward)
-            for i in range(0,16):
+            for i in range(0, 16):
                 # print(obs[0:3])
                 # print()
-                print(i,  ", {:.4f}, {}, {}".format(*obs[3*(i):3*(i+1)]))
+                print(i, ", {:.4f}, {}, {}".format(*obs[3 * (i):3 * (i + 1)]))
             print(obs[-4:])
             print(obs[-8:-4])
             print()

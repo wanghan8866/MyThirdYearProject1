@@ -1,4 +1,4 @@
-from typing import List, Tuple, Dict, Union
+from typing import List, Union
 
 
 class SelectionType:
@@ -30,7 +30,8 @@ class TrainingMeta:
             "hidden_network_architecture":
                 ListType([64, 32]),
             "epsilon": NumberType(0., 1., 1.),
-            "model": SelectionType(["DQN", "Double_DQN", "Double_Dueling_DQN", "Double_DQN_with_PER"], default="Double_DQN_with_PER"),
+            "model": SelectionType(["DQN", "Double_DQN", "Double_Dueling_DQN", "Double_DQN_with_PER"],
+                                   default="Double_DQN_with_PER"),
             'interation': SelectionType(["0"], default="0"),  # Options are ['binary', 'distance'],
             "working_directory": ListType(""),
         },

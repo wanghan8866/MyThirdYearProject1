@@ -1,7 +1,9 @@
-import numpy as np
-from agents.duelingDDQN.util import make_env, plot_learning_curve
-from agents.duelingDDQN.dueling_ddpn_agent import DuelingDDQNAgent
 from time import time
+
+import numpy as np
+
+from agents.duelingDDQN.dueling_ddpn_agent import DuelingDDQNAgent
+from agents.duelingDDQN.util import make_env, plot_learning_curve
 
 
 def train(testing=False, n_game=1, n_game_print=20, lr=1e-4, eps_min=0.1, gamma=0.99,
@@ -14,7 +16,7 @@ def train(testing=False, n_game=1, n_game_print=20, lr=1e-4, eps_min=0.1, gamma=
     n_games = n_game
     N = n_game_print
     total_frames = total_frames
-    frame_to_save = 0.9*total_frames
+    frame_to_save = 0.9 * total_frames
     if load_checkpoint:
         epsilon = 0.
         epsilon_min = 0.
@@ -51,7 +53,6 @@ def train(testing=False, n_game=1, n_game_print=20, lr=1e-4, eps_min=0.1, gamma=
                 agent.learn()
             else:
                 array = env.render(mode="rgb_array")
-                # print(array.shape)
             observation = new_state
             n_steps += 1
         scores[i] = score
@@ -70,9 +71,6 @@ def train(testing=False, n_game=1, n_game_print=20, lr=1e-4, eps_min=0.1, gamma=
             n_games = i + 1
             break
 
-        # print(scores)
-        # print(eps_history)
-
     x = [i + 1 for i in range(n_games)]
 
     plot_learning_curve(x, scores[:n_games], eps_history[:n_games], figure_file)
@@ -81,4 +79,4 @@ def train(testing=False, n_game=1, n_game_print=20, lr=1e-4, eps_min=0.1, gamma=
 
 
 if __name__ == '__main__':
-    train(testing=True, n_game=10,)
+    train(testing=True, n_game=10, )

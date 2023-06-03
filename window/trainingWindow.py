@@ -1,17 +1,14 @@
-import random
+from time import time
 
 import customtkinter as ctk
-from widget.gameCanvas import GameCanvas
-from utility.nameSplitor import splitByUpper
+from PIL import Image, ImageTk
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
+from matplotlib.figure import Figure
+
+from agents.snake_game_gen.Win_counter import WinCounter
 from training.base_training_env import BaseTrainingEnv
 from training.genetic_snake_training_env import load_stats
-from PIL import Image, ImageTk
 from utility.nameSplitor import splitByUnder
-from time import time
-from agents. snake_game_gen.Win_counter import WinCounter
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
-                                               NavigationToolbar2Tk)
 
 
 class TrainingWindow(ctk.CTkToplevel):

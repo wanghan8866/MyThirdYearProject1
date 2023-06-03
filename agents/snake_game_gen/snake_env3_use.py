@@ -1,28 +1,6 @@
-import gym
-from gym import Env
-import numpy as np
-from typing import Tuple, Optional, Union, Set, Dict, Any
-from fractions import Fraction
-import random
-from collections import deque
-import sys
-import os
-import json
-from gym import spaces
-import cv2
-import time
-from misc import *
-from genetic_algorithm.individual import Individual
-from neural_network import FeedForwardNetwork, linear, sigmoid, tanh, relu, leaky_relu, ActivationFunction, \
-    get_activation_by_name
-from stable_baselines3.common.env_checker import check_env
-from matplotlib import pyplot as plt
-from Win_counter import WinCounter
-from patterns import Pattern
 from path_finding import Mixed
-from snake_env3 import *
-
 from settings import settings
+from snake_env3 import *
 
 PRINT_NUM = 1
 if __name__ == '__main__':

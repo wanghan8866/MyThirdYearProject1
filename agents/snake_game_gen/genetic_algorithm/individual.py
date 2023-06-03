@@ -1,6 +1,5 @@
 from abc import abstractmethod
-from typing import Optional, Union
-import numpy as np
+
 
 class Individual(object):
     def __init__(self):
@@ -9,6 +8,7 @@ class Individual(object):
     @abstractmethod
     def get_result(self):
         raise Exception('get_result function must be defined')
+
     @abstractmethod
     def calculate_fitness(self):
         raise Exception('calculate_fitness function must be defined')

@@ -1,5 +1,5 @@
 import numpy as np
-import torch as T
+
 
 class ReplayBuffer:
     def __init__(self, max_size, input_shape, n_actions):
@@ -30,5 +30,3 @@ class ReplayBuffer:
         dones = self.terminal_memory[batch]
 
         return states, actions, rewards, new_states, dones
-
-

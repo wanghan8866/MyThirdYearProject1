@@ -1,14 +1,15 @@
+import collections
+# from snake_env5 import SnakeEnv5
+from time import time
+
+import cv2
 import gym
 import numpy as np
+
 from agent import DQNAgent
-from utils import plot_learning_curve
-from snake_env4 import Snake
-from snake_env2 import SnakeEnv2
-# from snake_env5 import SnakeEnv5
-from time import time, sleep
-import cv2
-import collections
 from deepQ_nn_vis import NN_canvas
+from snake_env2 import SnakeEnv2
+from utils import plot_learning_curve
 
 
 def clip_reward(r):
@@ -77,7 +78,7 @@ if __name__ == '__main__':
     N_Print = 300
     if testing:
         n_games = 100
-        test_scores=[]
+        test_scores = []
 
     if load_checkpoint:
         epsilon = 0
@@ -93,7 +94,6 @@ if __name__ == '__main__':
                      env_name=env_id)
     myCanvas = NN_canvas(None, network=agent.q_eval, bg="white", height=1000, width=1000)
     if load_checkpoint:
-
         agent.load_models()
 
     fname = agent.algo + '_' + agent.env_name + '_lr' + str(agent.lr) + '_' \

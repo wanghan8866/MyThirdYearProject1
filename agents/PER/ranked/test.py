@@ -1,25 +1,25 @@
-
-from gym import spaces
-import cv2
-import random
-from matplotlib import pyplot as plt
-from typing import Tuple
+import collections
 import os
+import random
+from copy import deepcopy
+from dataclasses import dataclass, field
+from time import time
+from typing import List
+from typing import Tuple
+
+import cv2
+import gym
+import numpy as np
 import torch as T
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from network import LinearDeepQNetwork,DeepQNetwork
-from memory import MaxHeap
-from copy import deepcopy
-from dataclasses import dataclass, field
-from typing import List
-import gym
-from time import time
-from snake_env2 import SnakeEnv2
-import collections
-import numpy as np
+from gym import spaces
+from matplotlib import pyplot as plt
 
+from memory import MaxHeap
+from network import LinearDeepQNetwork, DeepQNetwork
+from snake_env2 import SnakeEnv2
 
 
 def plot_learning_curve(x, scores, epsilons, filename, lines=None):
@@ -380,9 +380,6 @@ class SnakeEnv2(gym.Env):
             return self.img
 
 
-
-
-
 class LinearDeepQNetwork(nn.Module):
     def __init__(self, lr, n_actions, name, input_dims, chkpt_dir):
         super(LinearDeepQNetwork, self).__init__()
@@ -417,6 +414,7 @@ class LinearDeepQNetwork(nn.Module):
     def load_checkpoint(self):
         print("... load ...")
         self.load_state_dict(T.load(self.checkpoint_file))
+
 
 class DeepQNetwork(nn.Module):
     def __init__(self, lr, n_actions, name, input_dims, chkpt_dir):
@@ -466,8 +464,6 @@ class DeepQNetwork(nn.Module):
 
     def load_checkpoint(self):
         self.load_state_dict(T.load(self.checkpoint_file))
-
-
 
 
 @dataclass
@@ -527,8 +523,8 @@ class MaxHeap:
         array = deepcopy(self.array)
         indices = [i for i in range(len(array))]
         sorted_array = [list(x) for x in zip(*sorted(zip(array, indices),
-                        key=lambda pair: pair[0],
-                        reverse=True))]
+                                                     key=lambda pair: pair[0],
+                                                     reverse=True))]
 
         for index, value in enumerate(sorted_array[1]):
             self.array[value].rank = index + 1
@@ -556,7 +552,7 @@ class MaxHeap:
     def _build_max_heap(self):
         array = deepcopy(self.array)
         N = len(array)
-        for i in range(N//2, -1, -1):
+        for i in range(N // 2, -1, -1):
             array = self._max_heapify(array, i)
         return array
 
@@ -584,7 +580,7 @@ class MaxHeap:
         for start_idx in start:
             bs = start_idx // n_batches
             indices = np.array([[j * bs + k for k in range(bs)]
-                               for j in range(n_batches)], dtype=np.int16)
+                                for j in range(n_batches)], dtype=np.int16)
             self.indices.append(indices)
 
     def compute_probs(self):
@@ -594,14 +590,14 @@ class MaxHeap:
         for indices in self.indices[idx]:
             probs = []
             for index in indices:
-                p = 1 / (self.array[index].rank)**self.alpha
+                p = 1 / (self.array[index].rank) ** self.alpha
                 probs.append(p)
             z = [p / sum(probs) for p in probs]
             self.probs.append(z)
 
     def _calculate_weights(self, probs: List):
-        weights = np.array([(1 / self.mem_cntr * 1 / prob)**self.beta
-                           for prob in probs])
+        weights = np.array([(1 / self.mem_cntr * 1 / prob) ** self.beta
+                            for prob in probs])
         weights *= 1 / (max(weights))
         return weights
 
@@ -626,7 +622,6 @@ class MaxHeap:
                 row.append(np.array(item.transition[i]))
             sarsd.append(row)
         return sarsd, samples, weights
-
 
 
 class DQNAgent:
@@ -663,18 +658,18 @@ class DQNAgent:
         #                             name=self.env_name+'_'+self.algo+'_q_next',
         #                             chkpt_dir=self.chkpt_dir)
         self.q_eval = LinearDeepQNetwork(self.lr, self.n_actions,
-                                    input_dims=self.input_dims,
-                                    name=self.env_name+'_'+self.algo+'_q_eval',
-                                    chkpt_dir=self.chkpt_dir)
+                                         input_dims=self.input_dims,
+                                         name=self.env_name + '_' + self.algo + '_q_eval',
+                                         chkpt_dir=self.chkpt_dir)
 
         self.q_next = LinearDeepQNetwork(self.lr, self.n_actions,
-                                    input_dims=self.input_dims,
-                                    name=self.env_name+'_'+self.algo+'_q_next',
-                                    chkpt_dir=self.chkpt_dir)
+                                         input_dims=self.input_dims,
+                                         name=self.env_name + '_' + self.algo + '_q_next',
+                                         chkpt_dir=self.chkpt_dir)
 
     def choose_action(self, observation):
         if np.random.random() > self.epsilon:
-            state = T.tensor(np.array([observation]),dtype=T.float).to(self.q_eval.device)
+            state = T.tensor(np.array([observation]), dtype=T.float).to(self.q_eval.device)
             actions = self.q_eval.forward(state)
             action = T.argmax(actions).item()
         else:
@@ -709,7 +704,7 @@ class DQNAgent:
 
     def decrement_epsilon(self):
         self.epsilon = self.epsilon - self.eps_dec \
-                           if self.epsilon > self.eps_min else self.eps_min
+            if self.epsilon > self.eps_min else self.eps_min
 
     def save_models(self):
         self.q_eval.save_checkpoint()
@@ -736,8 +731,8 @@ class DQNAgent:
 
         self.rebalance_heap()
 
-        states, actions, rewards, states_, dones,\
-            sample_idx, weights = self.sample_memory()
+        states, actions, rewards, states_, dones, \
+        sample_idx, weights = self.sample_memory()
         indices = np.arange(self.batch_size)
         # print(indices)
         # print(actions)
@@ -745,10 +740,10 @@ class DQNAgent:
 
         q_next = self.q_next.forward(states_).max(dim=1)[0]
         q_next[dones] = 0.0
-        q_target = rewards + self.gamma*q_next
+        q_target = rewards + self.gamma * q_next
 
         td_error = np.abs((q_target.detach().cpu().numpy() -
-                          q_pred.detach().cpu().numpy()))
+                           q_pred.detach().cpu().numpy()))
         td_error = np.clip(td_error, -1., 1.)
 
         self.memory.update_priorities(sample_idx, td_error)
@@ -761,10 +756,6 @@ class DQNAgent:
         self.q_eval.optimizer.step()
         self.learn_step_counter += 1
         self.decrement_epsilon()
-
-
-
-
 
 
 def clip_reward(r):

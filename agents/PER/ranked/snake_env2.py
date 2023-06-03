@@ -1,14 +1,12 @@
-import math
-
-import gym
-from gym import spaces
-import numpy as np
-import cv2
 import random
-import time
-from collections import deque
-from matplotlib import pyplot as plt
 from typing import Tuple
+
+import cv2
+import gym
+import numpy as np
+from gym import spaces
+from matplotlib import pyplot as plt
+
 from agents.snake_game_gen.patterns import Pattern
 
 SNAKE_LEN_GOAL = 30

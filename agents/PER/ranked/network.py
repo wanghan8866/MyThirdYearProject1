@@ -1,10 +1,11 @@
 import os
+from typing import Callable, NewType
+
+import numpy as np
 import torch as T
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-import numpy as np
-from typing import List, Callable, NewType, Optional
 
 ActivationFunction = NewType('ActivationFunction', Callable[[np.ndarray], np.ndarray])
 
@@ -21,7 +22,7 @@ class LinearDeepQNetwork(nn.Module):
         super(LinearDeepQNetwork, self).__init__()
         self.checkpoint_dir = chkpt_dir
         self.checkpoint_file = os.path.join(self.checkpoint_dir, name)
-        self.file_name=name
+        self.file_name = name
 
         # print(input_dims)
         # r4
@@ -56,7 +57,7 @@ class LinearDeepQNetwork(nn.Module):
 
         return q
 
-    def save_checkpoint(self, generation:int,score:int):
+    def save_checkpoint(self, generation: int, score: int):
         print(f"... save ... at {self.checkpoint_file}")
         folder = os.path.join(self.checkpoint_dir, f"snake_{generation}_{score}")
         if not os.path.exists(folder):

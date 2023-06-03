@@ -64,7 +64,7 @@ def uniform_mutation_with_respect_to_best_individual(chromosome: np.ndarray, bes
     mutation_array = np.random.random(chromosome.shape) < prob_mutation
     uniform_mutation = np.random.uniform(size=chromosome.shape)
     chromosome[mutation_array] += uniform_mutation[mutation_array] * (
-                best_chromosome[mutation_array] - chromosome[mutation_array])
+            best_chromosome[mutation_array] - chromosome[mutation_array])
 
 
 def cauchy_mutation(individual: np.ndarray, scale: float) -> np.ndarray:

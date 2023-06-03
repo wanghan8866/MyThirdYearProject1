@@ -1,14 +1,11 @@
-import gym
-from gym import Env
-import tkinter as tk
-from PIL import Image, ImageTk
-import numpy as np
 import customtkinter as ctk
-import matplotlib.pyplot as plt
-from utility.envCreator import EnvCreator
-from utility.agentCreator import AgentCreator
-from typing import List
+import numpy as np
+from PIL import Image, ImageTk
+from gym import Env
+
 from meta.appMeta import AppMeta
+from utility.agentCreator import AgentCreator
+from utility.envCreator import EnvCreator
 
 print()
 dones = False

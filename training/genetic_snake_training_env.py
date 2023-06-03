@@ -1,23 +1,23 @@
+import csv
 import math
+import os
+import random
+from time import time
+from typing import List, Tuple, Union, Optional
 
 import numpy as np
-from agents. snake_game_gen.settings import settings as GLOBAL_SETTINGS
-from agents. snake_game_gen.genetic_algorithm.individual import Individual
-from agents. snake_game_gen.genetic_algorithm.population import Population
-from agents. snake_game_gen.snake_env3 import Snake, save_snake
-from typing import List, Tuple, Dict, Union, Optional
-from agents. snake_game_gen.genetic_algorithm.selection import ellitism_selection, roulette_wheel_selection, \
-    tournament_selection
-from agents. snake_game_gen.genetic_algorithm.mutation import gaussian_mutation, random_uniform_mutation
-from agents. snake_game_gen.genetic_algorithm.crossover import simulated_binary_crossover as SBX
-from agents. snake_game_gen.genetic_algorithm.crossover import uniform_binary_crossover, single_point_binary_crossover
-import random
-from agents. snake_game_gen.Win_counter import WinCounter
-from time import time
-import csv
-import os
+
+from agents.snake_game_gen.Win_counter import WinCounter
+from agents.snake_game_gen.genetic_algorithm.crossover import simulated_binary_crossover as SBX
+from agents.snake_game_gen.genetic_algorithm.crossover import single_point_binary_crossover
+from agents.snake_game_gen.genetic_algorithm.individual import Individual
+from agents.snake_game_gen.genetic_algorithm.mutation import gaussian_mutation, random_uniform_mutation
+from agents.snake_game_gen.genetic_algorithm.population import Population
+from agents.snake_game_gen.genetic_algorithm.selection import ellitism_selection, roulette_wheel_selection
+from agents.snake_game_gen.settings import settings as GLOBAL_SETTINGS
+from agents.snake_game_gen.snake_env3 import Snake, save_snake
+from agents.snake_game_gen.tk_nn import NN_canvas
 from training.base_training_env import BaseTrainingEnv
-from agents. snake_game_gen.tk_nn import NN_canvas
 
 
 def _calc_stats(data: List[Union[int, float]]) -> Tuple[float, float, float, float, float]:
@@ -126,7 +126,7 @@ def load_stats(path_to_stats: str, normalize: Optional[bool] = True):
 
 
 class GeneticSnakeTrainingEnv(BaseTrainingEnv):
-    def __init__(self, setting: dict, path: str, times: int, current_gen:int=0, create_snake=None, *args, **kwargs):
+    def __init__(self, setting: dict, path: str, times: int, current_gen: int = 0, create_snake=None, *args, **kwargs):
         super(GeneticSnakeTrainingEnv, self).__init__(setting, *args, **kwargs)
         self._SBX_eta = GLOBAL_SETTINGS['SBX_eta']
         self._mutation_bins = np.cumsum([GLOBAL_SETTINGS['probability_gaussian'],
@@ -152,7 +152,7 @@ class GeneticSnakeTrainingEnv(BaseTrainingEnv):
 
         for _ in range(eval(self.settings['num_parents'])):
             if create_snake:
-                individual=create_snake()
+                individual = create_snake()
             else:
                 individual = Snake(self.board_size,
                                    hidden_layer_architecture=eval(self.settings['hidden_network_architecture']),
@@ -184,7 +184,7 @@ class GeneticSnakeTrainingEnv(BaseTrainingEnv):
         self.times_to_save = times
         self.model_path = path
 
-    def update(self,display=False) -> None:
+    def update(self, display=False) -> None:
         # self.snake_widget_window.update()
         # self.nn_viz_window.update()
         if self.snake.is_alive:

@@ -1,13 +1,16 @@
 # genetic_algorithm/Selection.py
-import numpy as np
 from typing import List
-from .population import Population
+
+import numpy as np
+
 from .individual import Individual
+from .population import Population
 
 
 def ellitism_selection(population: Population, num_individuals: int) -> List[Individual]:
-    individuals = sorted(population.individuals, key = lambda individual: individual.fitness, reverse=True)
+    individuals = sorted(population.individuals, key=lambda individual: individual.fitness, reverse=True)
     return individuals[:num_individuals]
+
 
 def roulette_wheel_selection(population: Population, num_individuals: int) -> List[Individual]:
     selection = []
@@ -23,11 +26,12 @@ def roulette_wheel_selection(population: Population, num_individuals: int) -> Li
 
     return selection
 
+
 def tournament_selection(population: Population, num_individuals, tournament_size: int) -> List[Individual]:
     selection = []
     for _ in range(num_individuals):
         tournament = np.random.choice(population.individuals, tournament_size)
-        best_from_tournament = max(tournament, key = lambda individual: individual.fitness)
+        best_from_tournament = max(tournament, key=lambda individual: individual.fitness)
         selection.append(best_from_tournament)
 
     return selection

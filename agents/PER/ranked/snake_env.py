@@ -1,19 +1,18 @@
 import math
-
-import gym
-from gym import spaces
-import numpy as np
-import cv2
 import random
-import time
 from collections import deque
+
+import cv2
+import gym
+import numpy as np
+from gym import spaces
 from matplotlib import pyplot as plt
 
 SNAKE_LEN_GOAL = 30
 
 
 def collision_with_apple(apple_position, score, size):
-    apple_position = [random.randint(1, size-1) * 10, random.randint(1, size-1) * 10]
+    apple_position = [random.randint(1, size - 1) * 10, random.randint(1, size - 1) * 10]
     score += 1
     return apple_position, score
 
@@ -45,7 +44,7 @@ class SnakeEnv(gym.Env):
         self.action_space = spaces.Discrete(4)
         self.direction = 3
         self.size = size
-        self.max_snake_length = int(pow(self.size,2))
+        self.max_snake_length = int(pow(self.size, 2))
         # Example for using image as input (channel-first; channel-last also works):
         # self.observation_space = spaces.Box(low=-500, high=500,
         #                                     shape=(5 + SNAKE_LEN_GOAL,), dtype=np.float64)
@@ -171,7 +170,7 @@ class SnakeEnv(gym.Env):
 
         # self.total_reward = ((75 - euclidean_dist_to_apple) + apple_reward + death_reward) / 100
         # print(euclidean_dist_to_apple)
-        self.total_reward = apple_reward+death_reward - euclidean_dist_to_apple/100.
+        self.total_reward = apple_reward + death_reward - euclidean_dist_to_apple / 100.
 
         # print(self.total_reward)
 
@@ -203,7 +202,7 @@ class SnakeEnv(gym.Env):
         # Initial Snake and Apple position
         half = int(self.size // 2) * 10
         self.snake_position = [[half, half], [half - 10, half], [half - 20, half]]
-        self.apple_position = [random.randint(1, self.size-1) * 10, random.randint(1, self.size-1) * 10]
+        self.apple_position = [random.randint(1, self.size - 1) * 10, random.randint(1, self.size - 1) * 10]
         self.score = 0
         self.prev_button_direction = 1
         self.button_direction = 1

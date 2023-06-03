@@ -1,20 +1,18 @@
-import tkinter as tk
-from meta.appMeta import AppMeta
-from utility.imageLoader import ImageLoader
+import json
+import os
+
 import customtkinter as ctk
 from customtkinter import filedialog
-from frame.modelTestFrame import ModelTestFrame, Component, NumberType
-from window.trainingWindow import TrainingWindow
-from widget.selectSection import SelectSection
-from meta.trainingMeta import TrainingMeta
+
+from agents.snake_game_gen.snake_env3 import load_snake
 from frame.modelTestFrame import ModelTestFrame
-from utility.nameSplitor import splitByUpper
-from training.genetic_snake_training_env import GeneticSnakeTrainingEnv
-from agents. snake_game_gen.snake_env3 import load_snake
-import os
-import json
-from window.errorbox import ErrorBox
+from meta.trainingMeta import TrainingMeta
 from training.dqn_snake_training_env import DQNTrainingEnv
+from training.genetic_snake_training_env import GeneticSnakeTrainingEnv
+from utility.nameSplitor import splitByUpper
+from widget.selectSection import SelectSection
+from window.errorbox import ErrorBox
+from window.trainingWindow import TrainingWindow
 
 
 class TrainingFrame(ctk.CTkFrame):

@@ -1,17 +1,17 @@
-import tkinter as tk
-from meta.appMeta import AppMeta
-from utility.imageLoader import ImageLoader
-import customtkinter as ctk
-from widget.selectSection import SelectSection
-import numpy as np
-from typing import Tuple
-from window.gameWindow import GameWindow
-from window.errorbox import ErrorBox
-from customtkinter import filedialog
 import os
-from agents. snake_game_gen.patterns import Pattern
+import tkinter as tk
+from typing import Tuple
 
-from agents. snake_game_gen.snake_env3 import load_snake
+import customtkinter as ctk
+import numpy as np
+from customtkinter import filedialog
+
+from agents.snake_game_gen.patterns import Pattern
+from agents.snake_game_gen.snake_env3 import load_snake
+from meta.appMeta import AppMeta
+from widget.selectSection import SelectSection
+from window.errorbox import ErrorBox
+from window.gameWindow import GameWindow
 
 
 def load_snake_testing(pattern, directory, name):
@@ -90,16 +90,6 @@ class TestingFrame(ctk.CTkFrame):
             self.genetic_snake_agent_frame.pack_forget()
             self.general_snake_agent_frame.pack(side="bottom", pady=10)
 
-        # for frame in self.frame_map:
-        #     if len(self.section1.getSelected()) == 0:
-        #         self.frame_map[frame].pack_forget()
-        #         continue
-        #     if self.section1.getSelected()[0] == frame:
-        #         print("selected")
-        #         self.frame_map[frame].pack(fill="both")
-        #     else:
-        #         self.frame_map[frame].pack_forget()
-
     def on_btn_for_load(self):
         frame = self.section1.getSelected()
         if len(frame) == 0:
@@ -112,7 +102,7 @@ class TestingFrame(ctk.CTkFrame):
             return
         print(directory)
         self.snake_directory = directory
-        # print(os.listdir(directory))
+
         print(sorted([snake_file for snake_file in os.listdir(directory)
                       if snake_file.startswith("snake") and snake_file[-1].isdigit()],
                      key=lambda name: int(name.split("_")[1])))
