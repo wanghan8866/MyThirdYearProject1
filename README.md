@@ -30,7 +30,7 @@
 ## Usage
 ### GUI
 
-This demo connected training and testing snake game agents with different algorithms. More details in each mode are in below [`Screenshots`](#screenshots). 
+This demo `main.py` connected training and testing snake game agents with different algorithms. More details in each mode are in below [`Screenshots`](#screenshots). 
 
 ![recover](./thrid/third_year_design.png)
 
