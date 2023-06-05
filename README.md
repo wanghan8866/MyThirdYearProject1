@@ -12,7 +12,7 @@
 ## Requirements
 ### Installation
 1. Make sure Python 3.9 installed from https://www.python.org/downloads/
-2. To install all required libraries (better in a local virtual environment or a container to void libraries conflicts):
+2. To install all required libraries (better in a local virtual environment or a container to void libraries conflicts (Recommend [Anaconda])):
     1. ```pip install flappy_bird_gym```
     2. ```pip install -r requirements.txt```
 3. To run DQN models, the GPU (CUDA) is required:
@@ -120,5 +120,6 @@ For example, users can select Snake-Gen from the top options and choose any agen
 If there is any problem running the code, contact me by bing.wang-5@student.manchester.ac.uk.
 It might be more content in [github].
 
+[Anaconda]: https://www.anaconda.com/download
 [discord]: https://discord.com/channels/874340350062362681/874340350062362684
 [github]: https://github.com/wanghan8866/MyThirdYearProject1/new/master
