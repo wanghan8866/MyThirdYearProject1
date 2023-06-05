@@ -18,7 +18,7 @@
     1. ```pip install flappy_bird_gym```
     2. ```cd <PATH TO MyThirdYearProject1>```
     3. ```pip install -r requirements.txt```
-4. To run DQN models, the GPU (CUDA) is required:
+4. OPTIONAL: To run DQN models, the GPU (CUDA) is required:
     1. Follow https://pytorch.org/get-started/locally/ to find what command to use 
     2. Checking with:
        1. ```import torch```
