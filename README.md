@@ -12,16 +12,16 @@
 ## Requirements
 ### Installation
 1. Make sure Python 3.9 installed from https://www.python.org/downloads/
-2. To install all required libraries (better in a local virtual environment or a container to void libraries conflicts (Recommend [Anaconda])):
+2. To get the code
+    1. ```git clone https://github.com/wanghan8866/MyThirdYearProject1.git```
+3. To install all required libraries (better in a local virtual environment or a container to void libraries conflicts (Recommend [Anaconda])):
     1. ```pip install flappy_bird_gym```
     2. ```pip install -r requirements.txt```
-3. To run DQN models, the GPU (CUDA) is required:
+4. To run DQN models, the GPU (CUDA) is required:
     1. Follow https://pytorch.org/get-started/locally/ to find what command to use 
     2. Checking with:
        1. ```import torch```
        2. ```torch.cuda.is_available() # return True ```
-4. To get the code
-    1. ```git clone https://github.com/wanghan8866/MyThirdYearProject1.git```
 5. To run the GUI
     1. ```cd <PATH TO MyThirdYearProject1>```
     2. ```python main.py ```
