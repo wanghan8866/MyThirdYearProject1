@@ -1,5 +1,4 @@
 import collections
-# from snake_env5 import SnakeEnv5
 from time import time
 
 import cv2
@@ -24,19 +23,13 @@ def clip_reward(r):
 class StackFrames(gym.ObservationWrapper):
     def __init__(self, env, repeat):
         super(StackFrames, self).__init__(env)
-        # print(np.array([env.observation_space.low]).repeat(repeat, axis=0).shape)
-        # print(env.observation_space.high.repeat(repeat, axis=0))
-        # self.observation_space = gym.spaces.Box(
-        #     np.array([env.observation_space.low]).repeat(repeat, axis=0),
-        #     np.array([env.observation_space.high]).repeat(repeat, axis=0),
-        #
-        #     dtype=np.uint8)
+
         self.observation_space = gym.spaces.Box(
             np.array(env.observation_space.low).repeat(repeat, axis=0),
             np.array(env.observation_space.high).repeat(repeat, axis=0),
 
             dtype=np.uint8)
-        # print(self.observation_space.low.shape)
+
         self.stack = collections.deque(maxlen=repeat)
 
     def reset(self):
@@ -47,7 +40,6 @@ class StackFrames(gym.ObservationWrapper):
         for _ in range(self.stack.maxlen):
             self.stack.append(observation)
 
-        # print(np.array(self.stack, dtype=np.float16).shape)
         return np.array(self.stack, dtype=np.uint8).reshape(
             self.observation_space.low.shape)
 
@@ -58,9 +50,9 @@ class StackFrames(gym.ObservationWrapper):
 
 
 if __name__ == '__main__':
-    # env = gym.make('CartPole-v0')
+
     env_id = "snake-v2-r16"
-    # env = Snake([10,10])
+
     env = SnakeEnv2(10)
     print(env.observation_space.shape)
     env = StackFrames(env, repeat=16)
@@ -100,11 +92,7 @@ if __name__ == '__main__':
             + str(n_games) + 'games' + str(alpha) + \
             'alpha_' + str(beta) + '_replace_' + str(replace)
     figure_file = 'plots/' + fname + '.png'
-    # if you want to record video of your agent playing,
-    # do a mkdir tmp && mkdir tmp/dqn-video
-    # and uncomment the following 2 lines.
-    # env = wrappers.Monitor(env, "tmp/dqn-video",
-    #                    video_callable=lambda episode_id: True, force=True)
+
     n_steps = 0
     scores, eps_history, steps_array, apples, frames = [], [], [], [], []
 
@@ -122,23 +110,12 @@ if __name__ == '__main__':
         frames_per_game = 0
         while not done:
             action = agent.choose_action(observation)
-            # print(action)
+
             observation_, reward, done, info = env.step(action)
             score += reward
             if load_checkpoint:
-                # 0 up, 1 down, 2 left, 3 right
-                # try:
-                #     print("action", env.possible_directions[action])
-                # except Exception:
-                #     print("action",action)
-                # print("state", observation_.shape)
-                # print("reward", reward)
-                # print()
                 pass
-            #
-            # r = clip_reward(reward)
-            # print(np.sum(observation), r)
-            # print(observation_.shape)
+
             if not load_checkpoint:
                 agent.store_transition(observation, action,
                                        reward, observation_, done)
@@ -147,12 +124,11 @@ if __name__ == '__main__':
             elif not testing:
                 t_end = time() + 0.1
                 k = -1
-                # action = -1
+
                 while time() < t_end:
                     if k == -1:
-                        # pass
+
                         k = cv2.waitKey(1)
-                        # print(k)
 
                         if k == 97:
                             action = "l"
@@ -162,21 +138,21 @@ if __name__ == '__main__':
                             action = "u"
                         elif k == 115:
                             action = "d"
-                        # print(k)
+
                     else:
                         continue
 
                 env.render(mode="human")
                 myCanvas.update_network(observation_)
-                # sleep(0.5)
+
             observation = observation_
             n_steps += 1
             frames_per_game += 1
-            # print(n_steps)
+
         scores.append(score)
         steps_array.append(n_steps)
         apples.append(info["apple score"])
-        # print(info["apple score"])
+
         frames.append(frames_per_game)
         if testing:
             test_scores.append(len(env.snake_position))

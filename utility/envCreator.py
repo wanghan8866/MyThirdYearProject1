@@ -18,10 +18,7 @@ class EnvCreator:
         game_name = None
         if name == "Breakout":
             game_name = "BreakoutNoFrameskip-v4"
-            # env = make_atari_env(lambda: gym.make(game_name, render_mode='rgb_array'), n_envs=1, seed=0)
-            # # Stack 4 frames
-            # env = VecFrameStack(env, n_stack=4)
-            # return env
+
             return make_env(env_name=game_name)
 
         elif name == "Qbert":
@@ -31,7 +28,7 @@ class EnvCreator:
         elif name == "Tennis":
             game_name = "ALE/Tennis-v5"
         elif agent_name == "DeepQLearningSnakeAgent" and name == "Snake-gen":
-            # print("DeepQLearningSnakeAgent")
+
             env = SnakeEnv2(10)
             if pattern is not None:
                 print("use pattern")

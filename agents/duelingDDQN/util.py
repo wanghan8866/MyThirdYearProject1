@@ -42,7 +42,6 @@ class RepeatActionAndMaxFrame(gym.Wrapper):
         self.clip_reward = clip_reward
         self.no_ops = no_ops
         self.fire_first = fire_first
-        # self.frame_buffer = np.zeros_like((2, self.shape))
 
     def step(self, action):
         t_reward = 0.
@@ -71,7 +70,7 @@ class RepeatActionAndMaxFrame(gym.Wrapper):
             assert self.env.unwrapped.get_action_meanings()[1] == "FIRE"
             obs, _, _, _ = self.env.step(1)
         self.frame_buffer = np.zeros(shape=(2, *self.shape), dtype=np.float32)
-        # print(self.frame_buffer.shape)
+
         self.frame_buffer[0] = obs
         return obs
 
@@ -133,5 +132,5 @@ if __name__ == '__main__':
         obs, r, done, info = env.step(action)
         array = env.render(mode="rgb_array")
         print(array.shape)
-        # print(obs.shape)
+
         print(np.sum(array) / 255)

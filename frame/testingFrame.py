@@ -26,14 +26,11 @@ class TestingFrame(ctk.CTkFrame):
         label = ctk.CTkLabel(self, text="Testing Arena", font=ctk.CTkFont(size=15, weight="bold"))
         label.pack()
         self.game = "Snake-gen"
-        # self.section1 = SelectSection(self, "Agent", mode="m", content=[])
-        # print(AppMeta.GAMES.get("Snake-gen",[]))
+
         self.section1 = SelectSection(self, "Agent", mode="m", content=AppMeta.GAMES.get("Snake-gen", []),
                                       callback=self.on_select)
-        # self.section = SelectSection(self, "Game", mode="s", content=list(AppMeta.GAMES.keys()), linker=self.section1)
-        # self.section.pack(fill="x", padx=20)
+
         self.section1.pack(fill="x", padx=20, pady=10)
-        # self.section1.pack(fill="x", padx=20, pady=20)
 
         self.grid_length = 30
         self.voffset = 5
@@ -42,7 +39,7 @@ class TestingFrame(ctk.CTkFrame):
         self.gridmap = np.zeros(shape=(10, 10), dtype=np.uint8)
 
         self.color_map = ["white", "pink", "green", "blue", "red"]
-        # print()
+
         self.hoffset = int(self.canvas["width"]) // 2 - self.grid_length * 2
         self.snake_directory = None
 
@@ -72,13 +69,12 @@ class TestingFrame(ctk.CTkFrame):
         button = ctk.CTkButton(self.genetic_snake_agent_frame, text="Launch", command=self.on_click)
         button.grid(row=0, column=3, pady=10, padx=15)
 
-        # oval_element = self.canvas.create_oval(20, 20, 100, 100, width=2, fill="white")
         self.canvas.bind('<Button-1>', self.object_click_event)
         self.canvas.bind('<Button-3>', self.object_de_click_event)
         self.canvas.pack()
 
     def on_select(self):
-        # print("selected", self.section1.getSelected())
+
         if len(self.section1.getSelected()) == 0:
             self.general_snake_agent_frame.pack_forget()
             self.genetic_snake_agent_frame.pack_forget()
@@ -120,32 +116,28 @@ class TestingFrame(ctk.CTkFrame):
         x = (x - self.hoffset) // (self.grid_length)
         y = (y - self.voffset) // (self.grid_length)
         item = y + x * 10 + 1
-        # print(x, y, item)
+
         return x, y, item
 
     def object_click_event(self, event):
-        # item = self.canvas.find_closest(event.x, event.y)
+
         x, y, new_item = self.fromCoordsToItemIndex(event.x, event.y)
         if x >= 10 or x < 0 or y >= 10 or y < 0:
             return
         self.gridmap[y, x] = (self.gridmap[y, x] + 1) % 5
-        # print(self.gridmap[y, x] )
+
         self.canvas.itemconfigure(new_item, fill=self.color_map[self.gridmap[y, x]])
-        # print('Clicked object at: ', event.x, event.y, new_item)
 
     def object_de_click_event(self, event):
-        # item = self.canvas.find_closest(event.x, event.y)
+
         x, y, new_item = self.fromCoordsToItemIndex(event.x, event.y)
         if x >= 10 or x < 0 or y >= 10 or y < 0:
             return
         self.gridmap[y, x] = 0
         self.canvas.itemconfigure(new_item, fill="white")
-        # print('Clicked object at: ', event.x, event.y, new_item)
 
     def on_click(self, *args):
-        # print(self.gridmap)
-        # print(self.section.getSelected())
-        # print(self.section1.getSelected())
+
         creating_snake = None
         if self.snake_directory is not None:
             print(self.snake_directory)

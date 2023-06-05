@@ -10,8 +10,7 @@ class GameWindow(ctk.CTkToplevel):
     def __init__(self, master, games: list, agents: list, pattern=None, create_snake=None, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.title(games[0])
-        # self.geometry("400x400")
-        # self.resizable(False, False)
+
         label = ctk.CTkLabel(self, text=games[0])
         label.pack()
         self.game_frame = ctk.CTkFrame(self)
@@ -34,17 +33,12 @@ class GameWindow(ctk.CTkToplevel):
                 self.human_agents.append(game)
             game.pack(padx=5, pady=5, fill="both", expand=True)
             frame.grid(row=GameWindow.layouts[i][0], column=GameWindow.layouts[i][1], padx=5, pady=5, sticky="news")
-        # self.game_frame.grid_propagate(False)
-        # self.grid_propagate(False)
-        # self.pack_propagate(False)
+
         self.events_binding()
-        # print(games)
-        # print(agents)
 
     def onKey(self, e):
         for agent in self.human_agents:
             agent.on_key_press(e)
-        # print("key", args[0])
 
     def events_binding(self):
         self.bind("<Key>", self.onKey)

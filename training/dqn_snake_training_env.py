@@ -1,7 +1,6 @@
 import collections
 import csv
 import os
-# from PER.ranked.snake_env5 import SnakeEnv5
 from time import time
 from typing import List, Union, Tuple
 
@@ -36,13 +35,7 @@ def clip_reward(r):
 class StackFrames(gym.ObservationWrapper):
     def __init__(self, env, repeat):
         super(StackFrames, self).__init__(env)
-        # print(np.array([env.observation_space.low]).repeat(repeat, axis=0).shape)
-        # print(env.observation_space.high.repeat(repeat, axis=0))
-        # self.observation_space = gym.spaces.Box(
-        #     np.array([env.observation_space.low]).repeat(repeat, axis=0),
-        #     np.array([env.observation_space.high]).repeat(repeat, axis=0),
-        #
-        #     dtype=np.uint8)
+
         self._frames = env._frames
         self.observation_space = gym.spaces.Box(
             np.array(env.observation_space.low).repeat(repeat, axis=0),
@@ -60,7 +53,6 @@ class StackFrames(gym.ObservationWrapper):
         for _ in range(self.stack.maxlen):
             self.stack.append(observation)
 
-        # print(np.array(self.stack, dtype=np.float16).shape)
         return np.array(self.stack, dtype=np.uint8).reshape(
             self.observation_space.low.shape)
 
@@ -88,7 +80,6 @@ def save_stats(snake, path_to_dir: str, fname: str):
     frames = [individual._frames for individual in [snake]]
     apples = [individual.score for individual in [snake]]
     fitness = [individual.fitness for individual in [snake]]
-    # steps_history = [individual.steps_history for individual in population.individuals][np.argmax(apples)]
 
     write_header = True
     if os.path.exists(f):
@@ -99,7 +90,7 @@ def save_stats(snake, path_to_dir: str, fname: str):
                 ('fitness', fitness)
                 ]
     stats = ['mean', 'median', 'std', 'min', 'max']
-    # +[f"steps_{i}" for i in range(len(steps_history))]
+
     header = [t[0] + '_' + s for t in trackers for s in stats]
 
     with open(f, 'a') as csvfile:
@@ -108,17 +99,13 @@ def save_stats(snake, path_to_dir: str, fname: str):
             writer.writeheader()
 
         row = {}
-        # Create a row to insert into csv
+
         for tracker_name, tracker_object in trackers:
             curr_stats = _calc_stats(tracker_object)
             for curr_stat, stat_name in zip(curr_stats, stats):
                 entry_name = '{}_{}'.format(tracker_name, stat_name)
                 row[entry_name] = curr_stat
-        # for i in range(len(steps_history)):
-        #     entry_name=f"steps_{i}"
-        #     row[entry_name] = steps_history[i]
 
-        # Write row
         writer.writerow(row)
 
 
@@ -126,7 +113,7 @@ class DQNTrainingEnv(BaseTrainingEnv):
     def __init__(self, setting, *args, **kwargs):
         super().__init__(setting, *args, **kwargs)
         env_id = "snake-v2-r4"
-        # env = Snake([10,10])
+
         self.env = SnakeEnv2(10)
 
         print(self.env.observation_space.shape)
@@ -165,16 +152,7 @@ class DQNTrainingEnv(BaseTrainingEnv):
         self.myCanvas = Q_NN_canvas(None, network=self.agent.q_eval, bg="white", height=1000, width=1000)
         if self.load_checkpoint:
             self.agent.load_models()
-        # self.file_name = self.agent.algo + '_' + self.agent.env_name + '_lr' + str(self.agent.lr) + '_' \
-        #                  + str(n_games) + 'games' + str(alpha) + \
-        #                  'alpha_' + str(beta) + '_replace_' + str(replace)
-        # self.figure_file = 'plots/' + self.file_name + '.png'
 
-        # if you want to record video of your agent playing,
-        # do a mkdir tmp && mkdir tmp/dqn-video
-        # and uncomment the following 2 lines.
-        # env = wrappers.Monitor(env, "tmp/dqn-video",
-        #                    video_callable=lambda episode_id: True, force=True)
         self.n_steps = 0
         self.scores, self.eps_history, self.steps_array, self.apples, self.frames = [], [], [], [], []
 
@@ -183,7 +161,7 @@ class DQNTrainingEnv(BaseTrainingEnv):
         self.best_frames = 0
         self.average_frames = 0
         self.average_score = 0
-        # self.max
+
         self.current_generation = 0
         self.population = Pop(self.agent)
         self.done = False
@@ -197,7 +175,7 @@ class DQNTrainingEnv(BaseTrainingEnv):
             self.scores.append(self.score)
             self.steps_array.append(self.n_steps)
             self.apples.append(self.info["apple score"])
-            # print(info["apple score"])
+
             self.frames.append(self.frames_per_game)
             if self.testing:
                 self.test_scores.append(len(self.env.snake_position))
@@ -223,8 +201,7 @@ class DQNTrainingEnv(BaseTrainingEnv):
                 self.best_frames = np.mean(self.frames[-100:])
 
             self.eps_history.append(self.agent.epsilon)
-            # if self.n_steps > self.max_frames:
-            #     return
+
             self.current_generation += 1
 
             self.observation = self.env.reset()
@@ -237,38 +214,24 @@ class DQNTrainingEnv(BaseTrainingEnv):
         else:
 
             action = self.agent.choose_action(self.observation)
-            # print(action)
+
             observation_, reward, self.done, info = self.env.step(action)
             self.agent.score = len(self.env.snake_position)
             self.score += reward
             if self.load_checkpoint:
-                # 0 up, 1 down, 2 left, 3 right
-                # try:
-                #     print("action", env.possible_directions[action])
-                # except Exception:
-                #     print("action",action)
-                # print("state", observation_.shape)
-                # print("reward", reward)
-                # print()
                 pass
-            #
-            # r = clip_reward(reward)
-            # print(np.sum(observation), r)
-            # print(observation_.shape)
+
             if not self.load_checkpoint:
                 self.agent.store_transition(self.observation, action,
                                             reward, observation_, self.done)
                 self.agent.learn()
-                # print("learning")
+
                 if display:
                     self.myCanvas.update_network(observation_)
-                # self.env.render(mode="human")
 
-                # sleep(0.5)
             self.observation = observation_
             self.n_steps += 1
             self.frames_per_game += 1
-            # print(n_steps)
 
 
 if __name__ == '__main__':

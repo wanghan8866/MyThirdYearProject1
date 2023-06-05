@@ -39,7 +39,6 @@ def save_stats(population: Population, path_to_dir: str, fname: str):
     frames = [individual._frames for individual in population.individuals]
     apples = [individual.score for individual in population.individuals]
     fitness = [individual.fitness for individual in population.individuals]
-    # steps_history = [individual.steps_history for individual in population.individuals][np.argmax(apples)]
 
     write_header = True
     if os.path.exists(f):
@@ -50,7 +49,7 @@ def save_stats(population: Population, path_to_dir: str, fname: str):
                 ('fitness', fitness)
                 ]
     stats = ['mean', 'median', 'std', 'min', 'max']
-    # +[f"steps_{i}" for i in range(len(steps_history))]
+
     header = [t[0] + '_' + s for t in trackers for s in stats]
 
     with open(f, 'a') as csvfile:
@@ -59,17 +58,13 @@ def save_stats(population: Population, path_to_dir: str, fname: str):
             writer.writeheader()
 
         row = {}
-        # Create a row to insert into csv
+
         for tracker_name, tracker_object in trackers:
             curr_stats = _calc_stats(tracker_object)
             for curr_stat, stat_name in zip(curr_stats, stats):
                 entry_name = '{}_{}'.format(tracker_name, stat_name)
                 row[entry_name] = curr_stat
-        # for i in range(len(steps_history)):
-        #     entry_name=f"steps_{i}"
-        #     row[entry_name] = steps_history[i]
 
-        # Write row
         writer.writerow(row)
 
 
@@ -161,12 +156,6 @@ class GeneticSnakeTrainingEnv(BaseTrainingEnv):
                                    lifespan=GLOBAL_SETTINGS['lifespan'],
                                    apple_and_self_vision=self.settings['apple_and_self_vision'])
 
-            # individual = load_snake("models/test_64", f"snake_1400", settings)
-            # individual = Snakes(self.board_size, hidden_layer_architecture=self.settings['hidden_network_architecture'],
-            #                   hidden_activation=self.settings['hidden_layer_activation'],
-            #                   output_activation=self.settings['output_layer_activation'],
-            #                   lifespan=self.settings['lifespan'],
-            #                   apple_and_self_vision=self.settings['apple_and_self_vision'])
             individuals.append(individual)
         self.t1 = time()
 
@@ -179,59 +168,36 @@ class GeneticSnakeTrainingEnv(BaseTrainingEnv):
         self.snake = self.population.individuals[self._current_individual]
         self.myCanvas = NN_canvas(None, snake=self.snake, bg="white", height=1000, width=1000)
         self.current_generation = current_gen
-        # self.current_generation = 1699
+
         self.init_gen = self.current_generation
         self.times_to_save = times
         self.model_path = path
 
     def update(self, display=False) -> None:
-        # self.snake_widget_window.update()
-        # self.nn_viz_window.update()
+
         if self.snake.is_alive:
             self.snake.update()
-        # Current individual is alive
-        # print(self.snake.is_alive)
+
         if self.snake.is_alive:
-            # print("move here")
+
             self.snake.move()
             if display:
                 self.myCanvas.update_network()
-            # print("move after", self._current_individual )
+
             if self.snake.score > self.best_score:
                 self.best_score = self.snake.score
-                # self.ga_window.best_score_label.setText(str(self.snake.score))
-        # Current individual is dead
+
+
         else:
-            # Calculate fitness of current individual
+
             self.snake.calculate_fitness()
             fitness = self.snake.fitness
-            # print(self._current_individual, fitness)
-
-            # fieldnames = ['frames', 'score', 'fitness']
-            # f = os.path.join(os.getcwd(), 'test_del3_1_0_stats.csv')
-            # write_header = True
-            # if os.path.exists(f):
-            #     write_header = False
-
-            # #@TODO: Remove this stats write
-            # with open(f, 'a') as csvfile:
-            #     writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=',')
-            #     if write_header:
-            #         writer.writeheader()
-
-            #     d = {}
-            #     d['frames'] = self.snake._frames
-            #     d['score'] = self.snake.score
-            #     d['fitness'] = fitness
-
-            #     writer.writerow(d)
 
             if fitness > self.best_fitness:
                 self.best_fitness = fitness
-                # self.ga_window.best_fitness_label.setText('{:.2E}'.format(Decimal(fitness)))
 
             self._current_individual += 1
-            # Next generation
+
             if (self.current_generation > 0 and self._current_individual == self._next_gen_size) or \
                     (self.current_generation == self.init_gen and self._current_individual == eval(self.settings[
                                                                                                        'num_parents'])):
@@ -253,20 +219,14 @@ class GeneticSnakeTrainingEnv(BaseTrainingEnv):
             else:
                 current_pop = eval(
                     self.settings['num_parents']) if self.current_generation == 0 else self._next_gen_size
-                # self.ga_window.current_individual_label.setText(
-                #     '{}/{}'.format(self._current_individual + 1, current_pop))
 
-            # print(self._current_individual, len(self.population.individuals))
             self.snake = self.population.individuals[self._current_individual]
             self.myCanvas = NN_canvas(None, snake=self.snake, bg="white", height=1000, width=1000)
-            # self.snake_widget_window.snake = self.snake
-            # self.nn_viz_window.snake = self.snake
 
     def next_generation(self):
         self._increment_generation()
         self._current_individual = 0
 
-        # Calculate fitness of individuals
         for individual in self.population.individuals:
             individual.calculate_fitness()
 
@@ -275,9 +235,8 @@ class GeneticSnakeTrainingEnv(BaseTrainingEnv):
         random.shuffle(self.population.individuals)
         next_pop: List[Snake] = []
 
-        # parents + offspring selection type ('plus')
         if self.settings['selection_type'].lower() == 'plus':
-            # Decrement lifespan
+
             for individual in self.population.individuals:
                 individual.lifespan -= 1
 
@@ -289,16 +248,11 @@ class GeneticSnakeTrainingEnv(BaseTrainingEnv):
                 output_activation = individual.output_activation
                 lifespan = individual.lifespan
                 apple_and_self_vision = individual.apple_and_self_vision
-                #
-                # start_pos = individual.start_pos
-                # apple_seed = individual.apple_seed
-                # starting_direction = individual.starting_direction
 
-                # If the individual is still alive, they survive
                 if lifespan > 0:
                     s = Snake(board_size, chromosome=params, hidden_layer_architecture=hidden_layer_architecture,
                               hidden_activation=hidden_activation, output_activation=output_activation,
-                              lifespan=lifespan, apple_and_self_vision=apple_and_self_vision)  # ,
+                              lifespan=lifespan, apple_and_self_vision=apple_and_self_vision)
                     next_pop.append(s)
 
         while len(next_pop) < self._next_gen_size:
@@ -308,35 +262,26 @@ class GeneticSnakeTrainingEnv(BaseTrainingEnv):
             c1_params = {}
             c2_params = {}
 
-            # Each W_l and b_l are treated as their own chromosome.
-            # Because of this I need to perform crossover/mutation on each chromosome between parents
             for l in range(1, L):
                 p1_W_l = p1.network.params['W' + str(l)]
                 p2_W_l = p2.network.params['W' + str(l)]
                 p1_b_l = p1.network.params['b' + str(l)]
                 p2_b_l = p2.network.params['b' + str(l)]
 
-                # Crossover
-                # @NOTE: I am choosing to perform the same type of crossover on the weights and the bias.
                 c1_W_l, c2_W_l, c1_b_l, c2_b_l = self._crossover(p1_W_l, p2_W_l, p1_b_l, p2_b_l)
 
-                # Mutation
-                # @NOTE: I am choosing to perform the same type of mutation on the weights and the bias.
                 self._mutation(c1_W_l, c2_W_l, c1_b_l, c2_b_l)
 
-                # Assign children from crossover/mutation
                 c1_params['W' + str(l)] = c1_W_l
                 c2_params['W' + str(l)] = c2_W_l
                 c1_params['b' + str(l)] = c1_b_l
                 c2_params['b' + str(l)] = c2_b_l
 
-                # Clip to [-1, 1]
                 np.clip(c1_params['W' + str(l)], -1, 1, out=c1_params['W' + str(l)])
                 np.clip(c2_params['W' + str(l)], -1, 1, out=c2_params['W' + str(l)])
                 np.clip(c1_params['b' + str(l)], -1, 1, out=c1_params['b' + str(l)])
                 np.clip(c2_params['b' + str(l)], -1, 1, out=c2_params['b' + str(l)])
 
-            # Create children from chromosomes generated above
             c1 = Snake(p1.board_size, chromosome=c1_params, hidden_layer_architecture=p1.hidden_layer_architecture,
                        hidden_activation=p1.hidden_activation, output_activation=p1.output_activation,
                        lifespan=GLOBAL_SETTINGS['lifespan'])
@@ -344,17 +289,13 @@ class GeneticSnakeTrainingEnv(BaseTrainingEnv):
                        hidden_activation=p2.hidden_activation, output_activation=p2.output_activation,
                        lifespan=GLOBAL_SETTINGS['lifespan'])
 
-            # Add children to the next generation
             next_pop.extend([c1, c2])
 
-        # Set the next generation
         random.shuffle(next_pop)
         self.population.individuals = next_pop
 
     def _increment_generation(self):
         self.current_generation += 1
-        # self.ga_window.current_generation_label.setText(str(self.current_generation + 1))
-        # self.ga_window.current_generation_label.setText("<font color='red'>" + str(self.loaded[self.current_generation]) + "</font>")
 
     def _crossover(self, parent1_weights: np.ndarray, parent2_weights: np.ndarray,
                    parent1_bias: np.ndarray, parent2_bias: np.ndarray) -> Tuple[
@@ -364,12 +305,11 @@ class GeneticSnakeTrainingEnv(BaseTrainingEnv):
         child1_weights, child2_weights = None, None
         child1_bias, child2_bias = None, None
 
-        # SBX
         if crossover_bucket == 0:
             child1_weights, child2_weights = SBX(parent1_weights, parent2_weights, self._SBX_eta)
             child1_bias, child2_bias = SBX(parent1_bias, parent2_bias, self._SBX_eta)
 
-        # Single point binary crossover (SPBX)
+
         elif crossover_bucket == 1:
             child1_weights, child2_weights = single_point_binary_crossover(parent1_weights, parent2_weights,
                                                                            major=self._SPBX_type)
@@ -390,23 +330,20 @@ class GeneticSnakeTrainingEnv(BaseTrainingEnv):
         if self.settings['mutation_rate_type'].lower() == 'decaying':
             mutation_rate = mutation_rate / math.sqrt(self.current_generation + 1)
 
-        # Gaussian
         if mutation_bucket == 0:
-            # Mutate weights
+
             gaussian_mutation(child1_weights, mutation_rate, scale=scale)
             gaussian_mutation(child2_weights, mutation_rate, scale=scale)
 
-            # Mutate bias
             gaussian_mutation(child1_bias, mutation_rate, scale=scale)
             gaussian_mutation(child2_bias, mutation_rate, scale=scale)
 
-        # Uniform random
+
         elif mutation_bucket == 1:
-            # Mutate weights
+
             random_uniform_mutation(child1_weights, mutation_rate, -1, 1)
             random_uniform_mutation(child2_weights, mutation_rate, -1, 1)
 
-            # Mutate bias
             random_uniform_mutation(child1_bias, mutation_rate, -1, 1)
             random_uniform_mutation(child2_bias, mutation_rate, -1, 1)
 

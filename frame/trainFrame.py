@@ -23,8 +23,7 @@ class TrainingFrame(ctk.CTkFrame):
 
         self.section1 = SelectSection(self, "Model", mode="s", content=list(TrainingMeta.MODELS.keys()),
                                       callback=self.on_selected)
-        # self.section = SelectSection(self, "Game", mode="s", content=list(AppMeta.GAMES.keys()), linker=self.section1)
-        # self.section.pack(fill="x", padx=20)
+
         self.section1.pack(fill="x", padx=20, pady=10)
         self.content_frame = ctk.CTkFrame(self, border_color="gray75")
         open_button = ctk.CTkButton(self, text="Open a directory", command=self.open_dir)
@@ -63,7 +62,7 @@ class TrainingFrame(ctk.CTkFrame):
         for file in os.listdir(directory):
             if "_" in file and "." not in file:
                 gens = int(file.split("_")[1])
-                # print(gens)
+
                 self.snake_file_names[gens] = file
                 generations.append(gens)
                 if gens > max_iteration:
@@ -74,7 +73,7 @@ class TrainingFrame(ctk.CTkFrame):
             settings = json.load(fp)
 
         print("dir: selected", self.section1.getSelected())
-        # settings_iter =
+
         for com, (key, value) in zip(self.frame_map[frame[0]].components, settings.items()):
             value = settings[com.key]
             if isinstance(com.entry, ctk.CTkOptionMenu):
@@ -83,11 +82,10 @@ class TrainingFrame(ctk.CTkFrame):
                 com.entry.delete(0, len(com.entry.get()))
                 com.entry.insert(0, value)
 
-            # com.configure(text="")
         print(self.frame_map[frame[0]].get_components("generation"))
         print(self.frame_map[frame[0]].get_components("working_directory"))
         entry = self.frame_map[frame[0]].get_components("generation").entry
-        # for i, gens in enumerate(generations):
+
         entry.configure(values=[f"{gens}" for gens in sorted(generations)], )
         entry.set(f"{max_iteration}")
 
@@ -95,12 +93,7 @@ class TrainingFrame(ctk.CTkFrame):
         entry = self.frame_map[frame[0]].get_components("working_directory").entry
         entry.delete(0, len(entry.get()))
         entry.insert(0, directory)
-        # print("gens",generations)
-        # print("keys", settings)
-        # self.frame_map[frame[0]].get_components("working_directory")
 
-        # snake = load_snake(directory, max_name)
-        # self.setting = settings
         self.settings = settings
         self.settings["working_directory"] = directory
         self.settings["generation"] = max_iteration
@@ -108,17 +101,14 @@ class TrainingFrame(ctk.CTkFrame):
                                            current_gen=max_iteration + 1,
                                            create_snake=lambda: load_snake(directory, max_name))
 
-        # print(settings)
-
     def on_click(self, *args):
-        # print(self.gridmap)
-        # print(self.section.getSelected())
+
         print(self.section1.getSelected())
         if len(self.section1.getSelected()) == 0:
             ErrorBox("Snake training", "No snake selected!")
             return
         self.settings = self.frame_map[self.section1.getSelected()[0]].getAllInputs()
-        # print(settings)
+
         if self.section1.getSelected()[0] == "DoubleDeepQLearning":
             self.env = DQNTrainingEnv(self.settings)
             TrainingWindow(self, "Snake-DQN", "", settings=self.settings, training_env=self.env, speed=1)

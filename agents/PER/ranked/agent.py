@@ -31,15 +31,6 @@ class DQNAgent:
         self.memory = MaxHeap(mem_size, batch_size, alpha=alpha, beta=beta,
                               r_iter=r_iter)
 
-        # self.q_eval = DeepQNetwork(self.lr, self.n_actions,
-        #                             input_dims=self.input_dims,
-        #                             name=self.env_name+'_'+self.algo+'_q_eval',
-        #                             chkpt_dir=self.chkpt_dir)
-        #
-        # self.q_next = DeepQNetwork(self.lr, self.n_actions,
-        #                             input_dims=self.input_dims,
-        #                             name=self.env_name+'_'+self.algo+'_q_next',
-        #                             chkpt_dir=self.chkpt_dir)
         self.q_eval = LinearDeepQNetwork(self.lr, self.n_actions,
                                          input_dims=self.input_dims,
                                          name=self.env_name + '_' + self.algo + '_q_eval',
@@ -117,8 +108,7 @@ class DQNAgent:
         states, actions, rewards, states_, dones, \
         sample_idx, weights = self.sample_memory()
         indices = np.arange(self.batch_size)
-        # print(indices)
-        # print(actions)
+
         q_pred = self.q_eval.forward(states)[indices, actions]
 
         q_next = self.q_next.forward(states_).max(dim=1)[0]

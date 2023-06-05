@@ -27,7 +27,7 @@ class Snakes(Snake):
                  number_rounds: int = 100, loading: bool = False,
                  *args, **kwargs):
         super(Snakes, self).__init__(board_size, *args, **kwargs)
-        # print("loading snake")
+        
         if loading:
             self.snake = load_snake(snake_path, snake_name, settings)
         else:
@@ -46,42 +46,42 @@ class Snakes(Snake):
         self._frames = 0
 
     def calculate_fitness(self):
-        # raise Exception('calculate_fitness function must be defined')
-        # self._fitness = np.mean(self.all_fitness)
-        # self.score = np.mean(self.scores)
+        
+        
+        
 
         pass
 
     @property
     def fitness(self):
         return self._fitness
-        # raise Exception('fitness property must be defined')
+        
 
     def move(self):
-        # print("move start")
+        
         for episode in range(self.number_rounds):
             done = False
             obs = self.snake.reset()
-            # rewards = 0
+            
             while not done:
-                # action = self.snake.possible_directions[self.snake.action_space.sample()]
-                # print(self.network.params)
-                # env.snake.render()
+                
+                
+                
                 obs, reward, done, info = self.snake.step(-1)
 
             self.snake.calculate_fitness()
-            # self._fitness = (self._fitness * episode + self.snake.fitness) / (episode + 1)
-            # self._fitness = (self.score * episode + self.snake.score) / (episode + 1)
+            
+            
             self.score = (self.score * episode + self.snake.score) / (episode + 1)
             self._fitness = self.score
             self._frames = (self._frames * episode + self.snake._frames) / (episode + 1)
 
         self.is_alive = False
-        # print("end", self.is_alive)
+        
 
     def update(self):
         pass
-        # self.snake.update()
+        
 
     def encode_chromosome(self):
         pass

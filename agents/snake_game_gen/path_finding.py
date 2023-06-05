@@ -28,7 +28,7 @@ class BFS:
             path = queue[0]
             future_head = path[-1]
 
-            # If snake eats the apple, return the next move after snake's head
+            
             if future_head == self.apple_location:
                 return path
 
@@ -66,8 +66,8 @@ class LongestPath(BFS):
             except IndexError:
                 break
             snake_path = Snake.create_snake_from_body([10, 10], list(self.snake.snake_array) + path[1:])
-            # snake_path.snake_array = snake_path.snake_array + path[1:]
-            # print(snake_path.snake_array)
+            
+            
 
             for neighbour in ((0, 1), (0, -1), (1, 0), (-1, 0)):
                 if direction == neighbour:
@@ -81,7 +81,7 @@ class LongestPath(BFS):
                         path[i + 1:i + 1] = [extra_node_1, extra_node_2]
                     break
             print(*path, sep=", ")
-            # print()
+            
             return path[1:]
 
 
@@ -96,7 +96,7 @@ class Astar(BFS):
         :param apple: Apple instance
         """
         super().__init__(snake=snake, apple_location=apple)
-        # self.kwargs = kwargs
+        
 
     def run_astar(self):
         came_from = {}
@@ -108,18 +108,18 @@ class Astar(BFS):
         gscore = {start: 0}
         fscore = {start: heuristic(start, goal)}
         open_list: List[Tuple] = [(fscore[start], start)]
-        # print(start, goal, open_list)
+        
         while open_list:
             current = min(open_list, key=lambda x: x[0])[1]
-            # print(current)
+            
             open_list.pop(0)
-            # print(current)
+            
             if current == goal:
                 data = []
                 while current in came_from:
                     data.append(current)
                     current = came_from[current]
-                    # print(data)
+                    
                 return data
 
             close_list.add(current)
@@ -154,7 +154,7 @@ class Mixed:
         head = self.snake.snake_array[0]
         largest_neibhour_apple_distance = 0
         newhead = None
-        # print("excape")
+        
         for diff in ((0, 1), (0, -1), (1, 0), (-1, 0)):
             neighbour = head + diff
 
@@ -166,12 +166,12 @@ class Mixed:
 
             )
 
-            # Find the neibhour which has greatest Manhattan distance to apple and has path to tail
+            
             if largest_neibhour_apple_distance < neibhour_apple_distance:
-                # snake_tail = None
+                
                 snake_tail = self.snake.snake_array[1]
-                # Create a virtual snake with a neibhour as head, to see if it has a way to its tail,
-                # thus remove two nodes from body: one for moving one step forward, one for avoiding dead checking
+                
+                
                 snake = Snake.create_snake_from_body([10, 10], list(self.snake.snake_array)[2:] + [neighbour])
                 bfs = BFS(snake=snake, apple_location=snake_tail)
                 path = bfs.run_bfs()
@@ -184,39 +184,39 @@ class Mixed:
     def run_mixed(self):
         bfs = BFS(self.snake, self.apple_location)
         path = bfs.run_bfs()
-        # bfs = Astar(self.snake, self.apple_location)
-        # path = bfs.run_astar()
-        # if path is None:
-        #     return self.escape()
-        # else:
-        #     return path[-1]
+        
+        
+        
+        
+        
+        
 
-        # agent = LongestPath(self.snake, self.apple_location)
-        # path = agent.run_longest()
-        # print(self.snake.snake_array[0], "path1", path[-1], )
+        
+        
+        
         if isinstance(path, Point):
             return path
         elif path is None:
             return self.escape()
         else:
-            # path = [None] + list(reversed(path))
+            
             if path is None or len(path) == 1:
-                # print("here")
+                
                 return self.escape()
 
-            # print(self.snake.snake_array[0], "path1", path[1], len(path))
-            # print()
+            
+            
 
 
-            # print("snake head", self.snake.snake_array[0], " new: ", path[0])
-            # print()
+            
+            
             length = len(self.snake.snake_array)
             virtual_snake_body = (list(self.snake.snake_array) + path[1:])[-length:]
             virtual_snake_tail = (list(self.snake.snake_array) + path[1:])[-length - 1]
             virtual_snake = Snake.create_snake_from_body([10, 10], virtual_snake_body)
             virtual_snake_longest = BFS(snake=virtual_snake, apple_location=virtual_snake_tail)
             virtual_snake_longest_path = virtual_snake_longest.run_bfs()
-            # virtual_snake_longest_path = ""
+            
             if virtual_snake_longest_path is None:
                 return self.escape()
             else:

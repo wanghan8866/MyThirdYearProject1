@@ -36,7 +36,6 @@ class SelectSection(ctk.CTkFrame):
                                                                                                          column=row,
                                                                                                          padx=5, pady=0)
             t = "this is the second column for row %s" % row
-            # ImageNode(self.frame).grid(row=1, column=row)
 
     def clearAll(self):
         for child in self.frame.winfo_children():

@@ -22,7 +22,6 @@ class DuelingDeepQNetwork(nn.Module):
         self.fc1 = nn.Linear(fc_input_dims, 512)
         self.V = nn.Linear(512, 1)
         self.A = nn.Linear(512, n_actions)
-        # self.fc2 = nn.Linear(512, n_actions)
 
         self.optimizer = optim.RMSprop(self.parameters(), lr=lr)
         self.loss = nn.MSELoss()
@@ -54,8 +53,5 @@ class DuelingDeepQNetwork(nn.Module):
 
     def load_checkpoint(self):
         print("... loading checkpoint ...")
-        # print(self.checkpoint_file)
-        # print(list(self.state_dict().values())[:1])
+
         self.load_state_dict(T.load(self.checkpoint_file))
-        # print("after")
-        # print(list(sel f.state_dict().values())[:1])

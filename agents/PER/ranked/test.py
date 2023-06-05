@@ -93,7 +93,7 @@ def collision_with_self(snake_position):
     snake_head = snake_position[0]
 
     if snake_head in snake_position[1:]:
-        # print(snake_position)
+
         return 1
     else:
         return 0
@@ -103,102 +103,29 @@ class SnakeEnv2(gym.Env):
 
     def __init__(self, size):
         super(SnakeEnv2, self).__init__()
-        # Define action and observation space
-        # They must be gym.spaces objects
-        # Example when using discrete actions:
+
         self.action_space = spaces.Discrete(4)
         self.direction = 3
         self.size = size
         self.frames_from_last_apple = 0
         self.max_snake_length = int(pow(self.size, 2))
-        # Example for using image as input (channel-first; channel-last also works):
-        # self.observation_space = spaces.Box(low=-500, high=500,
-        #                                     shape=(5 + SNAKE_LEN_GOAL,), dtype=np.float64)
+
         self.state = np.zeros(shape=(size, size), dtype='uint8')
-        # self.observation_space = spaces.Box(low=0, high=255,
-        #                                     shape=(self.size * 10, self.size * 10, 3), dtype=np.uint8)
+
         self.observation_space = spaces.Box(low=-500, high=500,
                                             shape=(32,), dtype=np.float64)
 
         self.apple_num = 0
 
     def step(self, action):
-        # self.prev_actions.append(action)
-        # cv2.imshow('a', self.img)
-        # cv2.waitKey(1)
+
         self.state = np.zeros(shape=(self.size, self.size), dtype='uint8')
-        # self.img = np.zeros((self.size * 10, self.size * 10, 3), dtype='uint8')
-        # Display Apple
-        # cv2.rectangle(self.img, (self.apple_position[0] * 10, self.apple_position[1] * 10),
-        #               (self.apple_position[0] * 10 + 10, self.apple_position[1] * 10 + 10), (0, 0, 255), 3)
+
         self.state[self.apple_position[0], self.apple_position[1]] = 2
-        # Display Snake
+
         for position in self.snake_position:
-            # cv2.rectangle(self.img, (position[0] * 10, position[1] * 10),
-            #               (position[0] * 10 + 10, position[1] * 10 + 10), (0, 255, 0), 3)
             self.state[position[0], position[1]] = 1
 
-        # Takes step after fixed time
-        # t_end = time.time() + 0.25
-        # k = -1
-        # # action = -1
-        # while time.time() < t_end:
-        #     if k == -1:
-        #         # pass
-        #         k = cv2.waitKey(1)
-        #         # print(k)
-        #
-        #         if k == 97:
-        #             action = Direction.LEFT
-        #         elif k == 100:
-        #             action = Direction.RIGHT
-        #         elif k == 119:
-        #             action = Direction.UP
-        #         elif k == 115:
-        #             action = Direction.DOWN
-        #         # print(k)
-        #     else:
-        #         continue
-
-        # button_direction = action
-        # if self.direction == 0:
-        #     if action == 0:
-        #         self.direction = 0
-        #     elif action == 1:
-        #         self.direction = 1
-        #     else:
-        #         self.direction = 3
-        # elif self.direction == 1:
-        #     if action == 0:
-        #         self.direction = 1
-        #     elif action == 1:
-        #         self.direction = 2
-        #     else:
-        #         self.direction = 0
-        # elif self.direction == 2:
-        #     if action == 0:
-        #         self.direction = 2
-        #     elif action == 1:
-        #         self.direction = 3
-        #     else:
-        #         self.direction = 1
-        # else:
-        #     if action == 0:
-        #         self.direction = 3
-        #     elif action == 1:
-        #         self.direction = 0
-        #     else:
-        #         self.direction = 2
-        #
-        # # Change the head position based on the button direction
-        # if self.direction == 3:
-        #     self.snake_head[0] += 10
-        # elif self.direction == 1:
-        #     self.snake_head[0] -= 10
-        # elif self.direction == 2:
-        #     self.snake_head[1] += 10
-        # elif self.direction == 0:
-        #     self.snake_head[1] -= 10
         if action == -1:
             action = self.direction
 
@@ -217,13 +144,12 @@ class SnakeEnv2(gym.Env):
 
         apple_reward = 0
         death_reward = 0
-        # print(self.snake_head, self.apple_position)
-        # Increase Snake length on eating apple
+
         if self.snake_head == self.apple_position:
             self.apple_position, self.score = collision_with_apple(self.score, self.size, current_state=self.state)
             self.snake_position.insert(0, list(self.snake_head))
             apple_reward = 2
-            # apple_reward = 250
+
             self.apple_num += 1
             self.frames_from_last_apple = 0
 
@@ -235,54 +161,20 @@ class SnakeEnv2(gym.Env):
                 self.done = True
                 death_reward = -7
 
-        # On collision kill the snake and print the score
         if collision_with_boundaries(self.snake_head, self.size) == 1 or collision_with_self(self.snake_position) == 1:
-            # font = cv2.FONT_HERSHEY_SIMPLEX
-            # self.img = np.zeros((500, 500, 3), dtype='uint8')
-            # cv2.putText(self.img, 'Your Score is {}'.format(self.score), (140, 250), font, 1, (255, 255, 255), 2,
-            #             cv2.LINE_AA)
-            # cv2.imshow('a', self.img)
+
             if len(self.snake_position) >= self.max_snake_length - 5:
                 death_reward = 15
             else:
-                # death_reward = -100. / math.pow(len(self.snake_position), 0.8)
+
                 death_reward = -10.
-            # print("collide", collision_with_boundaries(self.snake_head, self.size),
-            #       collision_with_self(self.snake_position))
-            # print(self.snake_position)
+
             self.done = True
 
-        # euclidean_dist_to_apple = np.linalg.norm(np.array(self.snake_head) - np.array(self.apple_position), ord=1)
-        # print(euclidean_dist_to_apple)
-
-        # self.total_reward = ((75 - euclidean_dist_to_apple) + apple_reward + death_reward) / 100
-        # print(euclidean_dist_to_apple)
         self.total_reward = apple_reward + death_reward
 
-        # print(self.total_reward)
-
-        # self.reward = self.total_reward - self.prev_reward
-        # self.prev_reward = self.total_reward
-
-        # if self.done:
-        #     self.reward = -10
         info = {"apple score": self.apple_num}
 
-        # head_x = self.snake_head[0]
-        # head_y = self.snake_head[1]
-        #
-        # snake_length = len(self.snake_position)
-        # apple_delta_x = self.apple_position[0] - head_x
-        # apple_delta_y = self.apple_position[1] - head_y
-        #
-        # # create observation:
-        #
-        # observation = [head_x, head_y, apple_delta_x, apple_delta_y, snake_length] + list(self.prev_actions)
-        # observation = np.array(observation)
-        # observation = self.img
-        # print(observation)
-        # print(self.total_reward)
-        # print(self.state.T)
         if self.snake_position[-2][0] + 1 == self.snake_position[-1][0]:
             self.tail_direction = Direction.LEFT
         elif self.snake_position[-2][0] - 1 == self.snake_position[-1][0]:
@@ -291,9 +183,9 @@ class SnakeEnv2(gym.Env):
             self.tail_direction = Direction.UP
         else:
             self.tail_direction = Direction.DOWN
-        # print("head:", Direction.toString(self.direction), Direction.toString(self.tail_direction))
+
         self.observation = self.look()
-        # print("obs", observation)
+
         return self.observation, self.total_reward, self.done, info
 
     def look(self):
@@ -312,7 +204,7 @@ class SnakeEnv2(gym.Env):
         ], dtype=np.float64)
         obs[24 + self.direction] = 1
         obs[28 + self.tail_direction] = 1
-        # up, upright,right,rightdown, down, downleft,left,leftup
+
         return obs
 
     def look_at_direction(self, current_pos, direction: Tuple[int, int]):
@@ -329,14 +221,11 @@ class SnakeEnv2(gym.Env):
             x += direction[0]
             y += direction[1]
             distance += abs(direction[0]) + abs(direction[1])
-        # print((x, y), found_body, found_food, distance)
-        # cv2.line(self.img, (current_pos[0] * 10 + 5, current_pos[1] * 10 + 5), (x * 10 + 5, y * 10 + 5),
-        #          (255, 100, 100), thickness=1)
+
         return distance / 2. / self.size, found_body, found_food
 
     def reset(self):
-        # self.img = np.zeros((self.size * 10, self.size * 10, 3), dtype='uint8')
-        # Initial Snake and Apple position
+
         half = int(self.size // 2)
         self.snake_position = [[half, half], [half - 1, half], [half - 2, half]]
         self.apple_position = [random.randint(1, self.size - 1), random.randint(1, self.size - 1)]
@@ -344,7 +233,7 @@ class SnakeEnv2(gym.Env):
         self.prev_button_direction = 1
         self.button_direction = 1
         self.snake_head = [half, half]
-        # print(self.snake_position)
+
         self.apple_num = 0
         self.direction = Direction.RIGHT
         self.state = np.zeros(shape=(self.size, self.size), dtype='uint8')
@@ -352,30 +241,14 @@ class SnakeEnv2(gym.Env):
 
         self.done = False
 
-        # head_x = self.snake_head[0]
-        # head_y = self.snake_head[1]
-        #
-        # snake_length = len(self.snake_position)
-        # apple_delta_x = self.apple_position[0] - head_x
-        # apple_delta_y = self.apple_position[1] - head_y
-        #
-        # self.prev_actions = deque(maxlen=SNAKE_LEN_GOAL)  # however long we aspire the snake to be
-        #
-        # for i in range(SNAKE_LEN_GOAL):
-        #     self.prev_actions.append(-1)  # to create history
-
-        # create observation:
-        # observation = [head_x, head_y, apple_delta_x, apple_delta_y, snake_length] + list(self.prev_actions)
-        # observation = np.array(observation)
-        # observation = self.img
         observation = np.zeros((32,), dtype=np.float64)
         return observation
 
     def render(self, mode='human'):
         if mode == "human":
-            # cv2.waitKey(1)
+
             cv2.imshow('a', self.img)
-            # print(self.observation)
+
         else:
             return self.img
 
@@ -386,9 +259,7 @@ class LinearDeepQNetwork(nn.Module):
         self.checkpoint_dir = chkpt_dir
         self.checkpoint_file = os.path.join(self.checkpoint_dir, name)
         print(input_dims)
-        # self.fc1 = nn.Linear(*input_dims, 32)
-        # self.fc2 = nn.Linear(32, 32)
-        # self.q = nn.Linear(32, n_actions)
+
         self.fc1 = nn.Linear(*input_dims, 128)
         self.fc2 = nn.Linear(128, 128)
         self.fc3 = nn.Linear(128, 128)
@@ -424,12 +295,9 @@ class DeepQNetwork(nn.Module):
 
         self.conv1 = nn.Conv1d(input_dims[0], 32, 4)
         self.conv2 = nn.Conv1d(32, 64, 3)
-        # self.conv3 = nn.Conv1d(64, 64, 3, stride=1)
 
         fc_input_dims = self.calculate_conv_output_dims(input_dims)
-        #
-        # self.fc1 = nn.Linear(fc_input_dims, 512)
-        # self.fc2 = nn.Linear(512, n_actions)
+
         print(fc_input_dims)
         self.fc1 = nn.Linear(fc_input_dims, 512)
         self.fc2 = nn.Linear(512, n_actions)
@@ -443,7 +311,7 @@ class DeepQNetwork(nn.Module):
     def forward(self, state):
         conv1 = F.relu(self.conv1(state))
         conv2 = F.relu(self.conv2(conv1))
-        # conv3 = F.relu(self.conv3(conv2))
+
         conv_state = conv2.view(conv2.size()[0], -1)
 
         flat1 = F.relu(self.fc1(conv_state))
@@ -452,11 +320,10 @@ class DeepQNetwork(nn.Module):
         return q
 
     def calculate_conv_output_dims(self, input_dims):
-        # print(input_dims)
         state = T.zeros(1, *input_dims)
         dims = self.conv1(state)
         dims = self.conv2(dims)
-        # dims = self.conv3(dims)
+
         return int(np.prod(dims.size()))
 
     def save_checkpoint(self):
@@ -648,15 +515,6 @@ class DQNAgent:
         self.memory = MaxHeap(mem_size, batch_size, alpha=alpha, beta=beta,
                               r_iter=r_iter)
 
-        # self.q_eval = DeepQNetwork(self.lr, self.n_actions,
-        #                             input_dims=self.input_dims,
-        #                             name=self.env_name+'_'+self.algo+'_q_eval',
-        #                             chkpt_dir=self.chkpt_dir)
-        #
-        # self.q_next = DeepQNetwork(self.lr, self.n_actions,
-        #                             input_dims=self.input_dims,
-        #                             name=self.env_name+'_'+self.algo+'_q_next',
-        #                             chkpt_dir=self.chkpt_dir)
         self.q_eval = LinearDeepQNetwork(self.lr, self.n_actions,
                                          input_dims=self.input_dims,
                                          name=self.env_name + '_' + self.algo + '_q_eval',
@@ -734,8 +592,7 @@ class DQNAgent:
         states, actions, rewards, states_, dones, \
         sample_idx, weights = self.sample_memory()
         indices = np.arange(self.batch_size)
-        # print(indices)
-        # print(actions)
+
         q_pred = self.q_eval.forward(states)[indices, actions]
 
         q_next = self.q_next.forward(states_).max(dim=1)[0]
@@ -770,14 +627,13 @@ def clip_reward(r):
 class StackFrames(gym.ObservationWrapper):
     def __init__(self, env, repeat):
         super(StackFrames, self).__init__(env)
-        # print(np.array([env.observation_space.low]).repeat(repeat, axis=0).shape)
-        # print(env.observation_space.high.repeat(repeat, axis=0))
+
         self.observation_space = gym.spaces.Box(
             env.observation_space.low.repeat(repeat, axis=0),
             env.observation_space.high.repeat(repeat, axis=0),
 
             dtype=np.float32)
-        # print(self.observation_space.low.shape)
+
         self.stack = collections.deque(maxlen=repeat)
 
     def reset(self):
@@ -788,7 +644,6 @@ class StackFrames(gym.ObservationWrapper):
         for _ in range(self.stack.maxlen):
             self.stack.append(observation)
 
-        # print(np.array(self.stack, dtype=np.float16).shape)
         return np.array(self.stack, dtype=np.float16).reshape(
             self.observation_space.low.shape)
 
@@ -799,7 +654,7 @@ class StackFrames(gym.ObservationWrapper):
 
 
 if __name__ == '__main__':
-    # env = gym.make('CartPole-v0')
+
     env_id = "snake-v4"
     env = SnakeEnv2(10)
     print(env.observation_space.shape)
@@ -836,11 +691,7 @@ if __name__ == '__main__':
             + str(n_games) + 'games' + str(alpha) + \
             'alpha_' + str(beta) + '_replace_' + str(replace)
     figure_file = 'plots/' + fname + '.png'
-    # if you want to record video of your agent playing,
-    # do a mkdir tmp && mkdir tmp/dqn-video
-    # and uncomment the following 2 lines.
-    # env = wrappers.Monitor(env, "tmp/dqn-video",
-    #                    video_callable=lambda episode_id: True, force=True)
+
     n_steps = 0
     scores, eps_history, steps_array, apples, frames = [], [], [], [], []
 
@@ -860,10 +711,7 @@ if __name__ == '__main__':
             action = agent.choose_action(observation)
             observation_, reward, done, info = env.step(action)
             score += reward
-            #
-            # r = clip_reward(reward)
-            # print(np.sum(observation), r)
-            # print(observation_.shape)
+
             if not load_checkpoint:
                 agent.store_transition(observation, action,
                                        reward, observation_, done)
@@ -873,11 +721,11 @@ if __name__ == '__main__':
             observation = observation_
             n_steps += 1
             frames_per_game += 1
-            # print(n_steps)
+
         scores.append(score)
         steps_array.append(n_steps)
         apples.append(info["apple score"])
-        # print(info["apple score"])
+
         frames.append(frames_per_game)
 
         avg_score = np.mean(scores[-100:])

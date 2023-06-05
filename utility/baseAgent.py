@@ -33,11 +33,7 @@ class HumanAgent(BaseAgent):
 class BreakoutDDQN(BaseAgent):
     def __init__(self, game_name, env):
         super().__init__(game_name, env)
-        # print(os.path.curdir)
-        # cwd = os.getcwd()  # Get the current working directory (cwd)
-        # files = os.listdir(cwd)  # Get all the files in that directory
-        # print("Files in %r: %s" % (cwd, files))
-        # env = make_env(env_name, repeat=skip)
+
         self.agent = DuelingDDQNAgent(gamma=0.99, epsilon=0, lr=1e-4,
                                       input_dims=(self.env.observation_space.shape),
                                       n_actions=self.env.action_space.n, mem_size=50000,
@@ -46,7 +42,6 @@ class BreakoutDDQN(BaseAgent):
                                       env_name="BreakoutNoFrameskip-v4"
                                       )
         self.agent.load_models()
-        # self.myCanvas = NN_canvas(None, network=self.agent.q_eval, bg="white", height=1000, width=1000)
 
     def predict(self, state, action_space, action):
         return self.agent.choose_action(state)
@@ -55,12 +50,7 @@ class BreakoutDDQN(BaseAgent):
 class BirdDDQN(BaseAgent):
     def __init__(self, game_name, env):
         super().__init__(game_name, env)
-        # print(os.path.curdir)
-        # cwd = os.getcwd()  # Get the current working directory (cwd)
-        # files = os.listdir(cwd)  # Get all the files in that directory
-        # print("Files in %r: %s" % (cwd, files))
-        # env = make_env(env_name, repeat=skip)
-        # print(self.env.observation_space.shape)
+
         self.agent = DuelingDDQNAgent(gamma=0.99, epsilon=0, lr=1e-4,
                                       input_dims=(self.env.observation_space.shape),
                                       n_actions=self.env.action_space.n, mem_size=50000,
@@ -91,11 +81,9 @@ class SnakeGeneticAgent(BaseAgent):
         self.nn = NN_canvas(None, snake=env, bg="white", height=1000, width=1000)
 
     def predict(self, state, action_space, action):
-        # print("predicted action", self.agent.possible_directions[self.agent.action_space.sample()] )
         return -1
 
     def render(self):
-        # self.nn.update_network()
         return self.env.render(mode="rgb_array")
 
 
@@ -106,16 +94,15 @@ class AStarSnakeAgent(BaseAgent):
         self.path = []
 
     def predict(self, state, action_space, action):
-        # print("predicted action", self.agent.possible_directions[self.agent.action_space.sample()] )
+
         path = Mixed(self.agent, self.agent.apple_location).run_mixed()
         self.path = path
-        # print("path: ", path)
+
         if path is None:
             action = -1
         elif path[1] is None:
             action = -1
         else:
-            # print("path: ", *path)
 
             result = path[1] - self.agent.snake_array[0]
             old_action = action
@@ -127,10 +114,7 @@ class AStarSnakeAgent(BaseAgent):
                 action = "r"
             else:
                 action = "l"
-            # if old_action == action:
-            #     path_correctness[episode].append(1)
-            # else:
-            #     path_correctness[episode].append(0)
+
         return action
 
     def render(self):
@@ -144,21 +128,19 @@ class HumanSnakeAgent(BaseAgent):
         self.old_action = -1
 
     def predict(self, state, action_space, action):
-        # print("predicted action", self.agent.possible_directions[self.agent.action_space.sample()] )
-        # path = Mixed(self.agent, self.agent.apple_location).run_mixed()
-        # print("human", action)
+
         if action == 2:
             self.old_action = "u"
-            # return "u"
+
         elif action == 3:
             self.old_action = "r"
-            # return "r"
+
         elif action == 4:
             self.old_action = "l"
-            # return "l"
+
         elif action == 5:
             self.old_action = "d"
-            # return "d"
+
         return self.old_action
 
     def render(self):
@@ -186,10 +168,6 @@ class DeepQSnakeAgent(BaseAgent):
         self.myCanvas = Q_NN_canvas(None, network=self.agent.q_eval, bg="white", height=1000, width=1000)
 
     def predict(self, state, action_space, action):
-        # print("predicted action", self.agent.possible_directions[self.agent.action_space.sample()] )
-        # path = Mixed(self.agent, self.agent.apple_location).run_mixed()
-        # return "d"
-        # self.myCanvas.update_network(state)
         return self.agent.choose_action(state)
 
     def render(self):
@@ -198,39 +176,19 @@ class DeepQSnakeAgent(BaseAgent):
 
 if __name__ == '__main__':
     print(os.path.curdir)
-    cwd = os.getcwd()  # Get the current working directory (cwd)
-    files = os.listdir(cwd)  # Get all the files in that directory
+    cwd = os.getcwd()
+    files = os.listdir(cwd)
     print("Files in %r: %s" % (cwd, files))
-    # A2C.load("resources/agents/Breakout")
-    # env = make_atari_env('ALE/Breakout-v5', n_envs=1, seed=0)
-    # Stack 4 frames
-    # env = VecFrameStack(env, n_stack=4)
-    # model = A2C('CnnPolicy', env, verbose=1,
-    #             ent_coef=0.01,
-    #             vf_coef=0.25,
-    #             policy_kwargs=dict(optimizer_class=RMSpropTFLike, optimizer_kwargs=dict(eps=1e-5))
-    #             )
+
     env = make_atari_env('ALE/Breakout-v5', n_envs=8, seed=0)
-    # Stack 4 frames
+
     env = VecFrameStack(env, n_stack=4)
 
     print(env.observation_space.shape)
     print(env.action_space)
-    # model = A2C('CnnPolicy', env, verbose=1,
-    #             ent_coef=0.01,
-    #             vf_coef=0.25,
-    #             policy_kwargs=dict(optimizer_class=RMSpropTFLike, optimizer_kwargs=dict(eps=1e-5))
-    #             )
-    # model.learn(total_timesteps=int(1e4))
-    # model.save("Breakout_w")
-    #
-    # del model
-    #
+
     env = make_atari_env('ALE/Breakout-v5', n_envs=1, seed=0)
-    # Stack 4 frames
+
     env = VecFrameStack(env, n_stack=4)
     print(env.observation_space.shape)
     print(env.action_space)
-    # obs = env.reset()
-    # new_model = A2C.load("../resources/agents/Breakout1.zip", env=env)
-    # print(new_model.predict(obs))

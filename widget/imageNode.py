@@ -39,7 +39,6 @@ class ImageNode(ctk.CTkFrame):
                     child.configure(border_color="gray")
                     child.selected = False
         if self.linker:
-            # print("connected")
             self.linker.content = AppMeta.GAMES.get(self.name, [])
             self.linker.clearAll()
             self.linker.populate()
@@ -47,8 +46,7 @@ class ImageNode(ctk.CTkFrame):
             self.callback()
 
     def events_binding(self):
-        # self.bind("<Enter>", self.onEnter)
-        # self.bind("<Leave>", self.onLeave)
+
         self.bind("<Button-1>", self.onClick)
         for child in self.winfo_children():
             child.bind("<Button-1>", self.onClick)

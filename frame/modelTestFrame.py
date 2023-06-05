@@ -30,7 +30,7 @@ class Component(ctk.CTkFrame):
         self.label = ctk.CTkLabel(self, text=splitByUnder(name) + ":", font=ctk.CTkFont(size=15, weight="bold"),
                                   anchor='w')
         self.label.pack(fill="both", expand=True)
-        # print(type(value))
+
         if isinstance(value, SelectionType):
             self.entry = ctk.CTkOptionMenu(master=self,
                                            values=[str(v) for v in value.options])
@@ -44,7 +44,6 @@ class Component(ctk.CTkFrame):
             self.entry = ctk.CTkEntry(master=self, placeholder_text=str(value.default))
             self.entry.pack(side="bottom", padx=10, pady=5)  # set initial value
             self.entry.insert(0, str(value.default))
-        # print("component", self["height"])
 
     def get(self):
         return self.entry.get()
@@ -76,11 +75,11 @@ class ModelTestFrame(ctk.CTkFrame):
 
         heights = 0
         max_height = int(self["height"])
-        # print("max h",max_height)
+
         self.current_row = 0
         self.current_col = 0
         for i, (key, value) in enumerate(self.settings.items()):
-            # print(i, key, value)
+
             component = Component(self.frame, key, value)
             component.grid(row=self.current_row, column=self.current_col, sticky="nsew")
             component.update()
@@ -93,8 +92,6 @@ class ModelTestFrame(ctk.CTkFrame):
                 heights = 0
             else:
                 self.current_row += 1
-            # print(heights, max_height)
-        # label.pack()
 
     def onFrameConfigure(self, event):
         '''Reset the scroll region to encompass the inner frame'''
@@ -109,8 +106,6 @@ class ModelTestFrame(ctk.CTkFrame):
     def getAllInputs(self):
         settings = {}
         for i, (key, value) in enumerate(self.settings.items()):
-            # print(i, key, value)
-
             settings[key] = self.components[i].get()
 
         return settings

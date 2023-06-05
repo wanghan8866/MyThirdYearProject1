@@ -93,7 +93,7 @@ class DuelingDDQNAgent:
         max_actions = T.argmax(q_eval, dim=1)
 
         q_next[dones] = 0.
-        # print(dones.item())
+
         q_target = rewards + self.gamma * q_next[indices, max_actions]
         loss = self.q_eval.loss(q_target, q_pred).to(self.q_eval.device)
         loss.backward()

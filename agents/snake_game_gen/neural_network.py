@@ -28,7 +28,7 @@ class FeedForwardNetwork(object):
 
         self.rand = np.random.RandomState(seed)
 
-        # Initialize weights and bias
+        
         for l in range(1, len(self.layer_nodes)):
             if init_method == 'uniform':
                 self.params['W' + str(l)] = np.random.uniform(-1, 1, size=(self.layer_nodes[l], self.layer_nodes[l-1]))
@@ -42,26 +42,26 @@ class FeedForwardNetwork(object):
         
     def feed_forward(self, X: np.ndarray) -> np.ndarray:
         A_prev = X
-        L = len(self.layer_nodes) - 1  # len(self.params) // 2
+        L = len(self.layer_nodes) - 1  
 
-        # Feed hidden layers
+        
         for l in range(1, L):
             W = self.params['W' + str(l)]
             b = self.params['b' + str(l)]
-            # print(W.shape)
-            # print(b.shape)
-            # print(A_prev.shape)
-            # print()
+            
+            
+            
+            
             Z = np.dot(W, A_prev) + b
-            # print("hidden")
+            
             A_prev = self.hidden_activation(Z)
             self.params['A' + str(l)] = A_prev
 
-        # Feed output
+        
         W = self.params['W' + str(L)]
         b = self.params['b' + str(L)]
         Z = np.dot(W, A_prev) + b
-        # print("output")
+        
         out = self.output_activation(Z)
         self.params['A' + str(L)] = out
 

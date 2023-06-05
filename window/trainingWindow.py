@@ -20,10 +20,7 @@ class TrainingWindow(ctk.CTkToplevel):
         super().__init__(master, *args, **kwargs)
         self.title("Test")
         print("settings in train window", settings)
-        # self.geometry("400x400")
-        # self.resizable(False, False)
-        # label = ctk.CTkLabel(self, text="window")
-        # label.pack()
+
         self.game_canvas = ctk.CTkCanvas(self, width=400, height=400)
         self.game_canvas.grid(row=0, column=0)
 
@@ -36,7 +33,7 @@ class TrainingWindow(ctk.CTkToplevel):
         max_row = 0
         self.training_env = training_env
         for i, (key, value) in enumerate(settings.items()):
-            # print(i, key, value)
+
             component = ctk.CTkLabel(self.stats_frame, text=f"{splitByUnder(key)}: {value}", anchor="w",
                                      font=ctk.CTkFont(size=15, weight="bold"))
             component.grid(row=current_row, column=current_col, sticky="nsew")
@@ -52,9 +49,9 @@ class TrainingWindow(ctk.CTkToplevel):
                 current_row += 1
                 if current_row > max_row:
                     max_row = current_row
-            # print(heights, max_height,max_row)
+
         current_row = max_row
-        # print(((time() - self.training_env.t1)/3600.))
+
         self.generation_label = ctk.CTkLabel(
             self.stats_frame,
 
@@ -128,19 +125,12 @@ class TrainingWindow(ctk.CTkToplevel):
         fig = Figure(figsize=(10, 5),
                      dpi=100)
 
-        # creating the Tkinter canvas
-        # containing the Matplotlib figure
         self.graph_canvas = FigureCanvasTkAgg(fig,
                                               master=self.graph_frame)
         self.graph_canvas.draw()
 
-        # placing the canvas on the Tkinter window
         self.graph_canvas.get_tk_widget().pack()
 
-        # placing the toolbar on the T
-
-        # print(games)
-        # print(agents)
         self.speed = speed
 
         self.images = [None]
@@ -157,12 +147,9 @@ class TrainingWindow(ctk.CTkToplevel):
         img = self.training_env.snake.render(mode="2d_array")
 
         self.images[0] = ImageTk.PhotoImage(image=Image.fromarray(img))
-        # self.create_image((self.layout[i][0] * obs.shape[1], self.layout[i][1] * obs.shape[0]), anchor="nw",
-        #                   image=self.images[0])
+
         self.game_canvas.create_image((0, 0), anchor="nw",
                                       image=self.images[0])
-        # if self.display_nn:
-        #     self.training_env.myCanvas.update_network(self.training_env.snake.observation)
 
         self.generation_label.configure(
 
@@ -190,30 +177,23 @@ class TrainingWindow(ctk.CTkToplevel):
         self.which_one.configure(
             text=f"Iteration: {self.training_env._current_individual}",
         )
-        # print(img.shape)
+
         try:
             self.speed = int(self.speed_entry.get())
         except Exception:
             self.speed_entry.delete(0, len(self.speed_entry.get()))
             self.speed_entry.insert(0, self.speed)
 
-        # self.training()
         self.after(self.speed, self.training)
 
     def generation_update(self):
         data = load_stats(self.training_env.model_path + "/snake_stats.csv", normalize=False)
-        # print(data["apples"]["max"])
+
         fig = Figure(figsize=(10, 5),
                      dpi=100)
 
-        # list of squares
-        # order = random.randint(0, 10)
-        # y = [i ** order for i in range(101)]
-
-        # adding the subplot
         plot1 = fig.add_subplot(111)
 
-        # plotting the graph
         plot1.plot(data["apples"]["max"])
         plot1.set_title("Max apples number in each generation")
         plot1.set_xlabel("Generations", color="C0")
